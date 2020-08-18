@@ -3,39 +3,52 @@ package com.koreait.pjt.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.koreait.pjt.vo.UserVO;
-
-public class JdbcTemplate<T> {
-	
-	private static JdbcTemplate<?> instance = null;
-	public static JdbcTemplate<?> getInstance(){
-		if(instance == null) {
-			instance = new JdbcTemplate<Object>();
-		}
-		return instance;
-	}
-	
-	public static List<?> excuteQuery(String sql, JdbcSelectInterface jdbc){
-		List<?> list = new ArrayList();
+public class JdbcTemplate {
+	public static int executeQuery(String sql, JdbcSelectInterface jdbc){
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+		int result = -1;
 		try {
 			conn = DBConnection.getConn();
 			ps = conn.prepareStatement(sql);
-			list = jdbc.excuteQuery(ps);
+			rs = jdbc.prepard(ps);
+			result = jdbc.executeQuery(rs);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			DBConnection.close(conn, ps);
+			DBConnection.close(conn, ps, rs);
+		}
+	
+		return result;
+	}
+	
+	public static List<?> executeQueryList(String sql, JdbcSelectInterface jdbc){
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		List<?> list = new ArrayList();
+		
+		try {
+			conn = DBConnection.getConn();
+			ps = conn.prepareStatement(sql);
+			rs = jdbc.prepard(ps);
+			list = jdbc.executeQueryList(rs);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBConnection.close(conn, ps, rs);
 		}
 	
 		return list;
 	}
+	
 	public static int executeUpdate(String sql,JdbcUpdateInterface jdbc) {
 		int result = 0;
 		Connection conn = null;
@@ -44,7 +57,7 @@ public class JdbcTemplate<T> {
 		try {
 			conn = DBConnection.getConn();
 			ps = conn.prepareStatement(sql);
-			result = jdbc.executeUpdate(ps);
+			result = jdbc.update(ps);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {

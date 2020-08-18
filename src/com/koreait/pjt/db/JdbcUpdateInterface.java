@@ -5,5 +5,5 @@ import java.sql.SQLException;
 import java.util.*;
 
 public interface JdbcUpdateInterface {
-	int executeUpdate(PreparedStatement ps) throws SQLException;
+	public abstract int update(PreparedStatement ps) throws SQLException;
 }
