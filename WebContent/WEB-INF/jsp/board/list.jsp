@@ -1,10 +1,8 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.koreait.pjt.vo.BoardVO"%>
 <%@page import="java.util.*"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<%
-List<BoardVO> list = (ArrayList) request.getAttribute("data");
-%>
 <title>게시판</title>
 </head>
 <style>
@@ -48,44 +46,49 @@ div {
 	cursor: pointer;
 	color: black;
 }
+
+#user_welcome {
+	text-align: right;
+}
 </style>
 <body>
-	<div>${Error}</div>
-	<div>${Warring}</div>
 	<div>
 		<h1>게시판 리스트</h1>
 	</div>
+		<div id="user_welcome">${login_user.user_nm}님 환영합니다.</div>
 	<table>
 		<tr>
 			<th style="width: 60px;">번호</th>
 			<th style="width: 300px;">제목</th>
-			<th style="width: 150px;">작성일</th>
+			<th style="width: 60px;">조회수</th>
 			<th style="width: 60px;">작성자</th>
+			<th style="width: 150px;">작성일</th>
 		</tr>
-		<%
-			for (BoardVO vo : list) {
-		%>
-		<tr class="itemRow" onclick="moveToDetail(<%=vo.getI_board()%>)">
-			<td><%=vo.getI_board()%></td>
-			<td><%=vo.getTitle()%></td>
-			<td><%=vo.getR_dt()%></td>
-			<td><%=vo.getI_user()%></td>
-		</tr>
-		<%
-			}
-		%>
+		<c:if test="${!empty data}">
+			<c:forEach items="${data}" var="item">
+				<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
+					<td>${item.i_board }</td>
+					<td>${item.title }</td>
+					<td>${item.hits }</td>
+					<td>${item.user_nm }</td>
+					<td>${item.r_dt }</td>
+				</tr>
+			</c:forEach>
+		</c:if>
+		<c:if test="${empty data}">
+			<tr>
+				<td colspan=5 style="text-align: center;">작성글이 없습니다.</td>
+			</tr>
+		</c:if>
 	</table>
 	<div>
-		<button onclick="moveToWrite();">글쓰기</button>
+		<a href="Regmod"><button>글쓰기</button></a>
 	</div>
 	<script type="text/javascript">
-		function moveToDetail(PK) {
-			console.log(PK);
-			location.href = 'BoardDetail?id=' + PK;
-		}
-		function moveToWrite() {
-			location.href = 'BoardRegmod';
-		}
+	function moveToDetail(PK) {
+		console.log(PK);
+		location.href = 'Detail?id='+PK;
+	}
 	</script>
 </body>
 </html>

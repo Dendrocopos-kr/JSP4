@@ -5,11 +5,18 @@ public class UserVO {
 	private String user_id;
 	private String user_pw;
 	private String user_nm;
+	private int hits;
 	private String user_email;
 	private String profile_img;
 	private String r_dt;
 	private String m_dt;
 
+	public int getHits() {
+		return hits;
+	}
+	public void setHits(int hits) {
+		this.hits = hits;
+	}
 	public int getI_user() {
 		return i_user;
 	}

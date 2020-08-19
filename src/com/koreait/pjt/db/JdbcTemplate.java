@@ -15,7 +15,8 @@ public class JdbcTemplate {
 		try {
 			conn = DBConnection.getConn();
 			ps = conn.prepareStatement(sql);
-			rs = jdbc.prepard(ps);
+			jdbc.prepard(ps);
+			rs = ps.executeQuery();
 			result = jdbc.executeQuery(rs);
 			
 		}catch(Exception e) {
@@ -25,28 +26,6 @@ public class JdbcTemplate {
 		}
 	
 		return result;
-	}
-	
-	public static List<?> executeQueryList(String sql, JdbcSelectInterface jdbc){
-		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		
-		List<?> list = new ArrayList();
-		
-		try {
-			conn = DBConnection.getConn();
-			ps = conn.prepareStatement(sql);
-			rs = jdbc.prepard(ps);
-			list = jdbc.executeQueryList(rs);
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			DBConnection.close(conn, ps, rs);
-		}
-	
-		return list;
 	}
 	
 	public static int executeUpdate(String sql,JdbcUpdateInterface jdbc) {

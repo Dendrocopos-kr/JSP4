@@ -10,25 +10,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.koreait.pjt.db.UserDAO;
+import com.koreait.pjt.db.BoardDAO;
 import com.koreait.pjt.vo.BoardVO;
 
-@WebServlet("/BoardList")
+@WebServlet("/Board/List")
 public class BoardListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession hs = request.getSession();
-		
-		if( hs.getAttribute(Const.LOGIN_USER) == null ) {
-			response.sendRedirect("Login");
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if (!MyUtils.loginCheck(request, response, Const.DEFUALT_PAGE)) {
 			return;
 		}
-		List<BoardVO> e = (List<BoardVO>) UserDAO.selectBoardList();
+		HttpSession hs = request.getSession();
+		request.setAttribute("user", hs.getAttribute(Const.LOGIN_USER));
+		List<BoardVO> e = BoardDAO.selectBoardList();
 		request.setAttribute("data", e);
-		ViewResolver.forward("board/list", request, response);			
+		ViewResolver.forward("board/list", request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 	}
 
 }

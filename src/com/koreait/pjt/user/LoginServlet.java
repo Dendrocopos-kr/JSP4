@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
 			strMsg = "로그인 성공";
 			HttpSession hs = request.getSession();
 			hs.setAttribute(Const.LOGIN_USER, param);
-			response.sendRedirect("BoardList");
+			response.sendRedirect("Board/List");
 			return;
 		case 2:// 비번틀림
 			strMsg = "비밀번호를 확인해주세요.";

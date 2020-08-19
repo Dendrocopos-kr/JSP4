@@ -31,9 +31,8 @@ public class UserDAO {
 		String sql = " select * from t_user where user_id=? ";
 		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 			@Override
-			public ResultSet prepard(PreparedStatement ps) throws SQLException {
+			public void prepard(PreparedStatement ps) throws SQLException {
 				ps.setNString(1, param.getUser_id());
-				return ps.executeQuery();
 			}
 
 			@Override
@@ -51,63 +50,27 @@ public class UserDAO {
 				}
 				return 3;
 			}
-
-			@Override
-			public List<?> executeQueryList(ResultSet rs) {
-				return null;
-			}
 		});
 	}
 	
-	public static List<?> selectBoardList() {
-		String sql = " select id_board, title, r_dt, id_student from t_board order by id_board DESC";
-		//sql = " select id_board,title,r_dt,nm from VIEW_BOARD_LIKE order by id_board DESC ";
-		
-		return JdbcTemplate.executeQueryList(sql, new JdbcSelectInterface() {
-
+	public static int getUserName(UserVO param) {
+		String sql = " select user_nm from t_user where i_user = ? ";
+		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+			
 			@Override
-			public int executeQuery(ResultSet rs) throws SQLException {
-				return 0;
-			}
-
-			@Override
-			public ResultSet prepard(PreparedStatement ps) throws SQLException {
-				return ps.executeQuery();
-			}
-
-			@Override
-			public List<BoardVO> executeQueryList(ResultSet rs) {
-				List<BoardVO> list = new ArrayList();
-				try {
-					while(rs.next())
-					{
-						BoardVO e = new BoardVO();
-						
-						e.setI_board(rs.getInt("id_board"));
-						e.setTitle(rs.getNString("title"));
-						// vo.setCtnt( rs.getNString("ctnt") );
-						e.setR_dt(rs.getNString("r_dt"));
-						// vo.setId_student( rs.getInt("id_student") );
-						e.setI_user(rs.getInt("id_student"));
-						/*
-						e.setI_board( rs.getInt("i_board") );
-						e.setTitle( rs.getNString("title") );
-						e.setCtnt( rs.getNString("ctnt") );
-						e.setHits(rs.getInt("hits") );
-						e.setI_user( rs.getInt("i_user") );
-						e.setR_dt( rs.getNString("r_dt") );
-						e.setM_dt( rs.getNString("m_dt") );
-						*/
-						list.add(e);
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				return list;
+			public void prepard(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_user());
 			}
 			
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				if(rs.next()) {
+					String dbNM = rs.getNString("user_nm");
+					param.setUser_nm(dbNM);
+					return 1;
+				}
+				return 0;
 			}
-		);
-		
+		});
 	}
 }

@@ -6,8 +6,16 @@ public class BoardVO {
 	private String ctnt;
 	private int hits;
 	private int i_user;
+	private String user_nm;
 	private String r_dt;
 	private String m_dt;
+
+	public String getUser_nm() {
+		return user_nm;
+	}
+	public void setUser_nm(String user_nm) {
+		this.user_nm = user_nm;
+	}
 	public int getI_board() {
 		return i_board;
 	}
