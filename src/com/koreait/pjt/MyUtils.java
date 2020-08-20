@@ -1,21 +1,27 @@
 package com.koreait.pjt;
+
 import java.io.IOException;
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.koreait.pjt.vo.UserVO;
+
 public class MyUtils {
-	public static boolean loginCheck(HttpServletRequest request, HttpServletResponse response,String defualt_page) throws IOException {
+	public static UserVO getLoginUser(HttpServletRequest request) {
 		HttpSession hs = request.getSession();
-		if( hs.getAttribute(Const.LOGIN_USER) == null ) {
-			response.sendRedirect(defualt_page);
-			return false;
-		}
-		return true;
+		return (UserVO) hs.getAttribute(Const.LOGIN_USER);
 	}
-	
+
+	public static boolean isLogout(HttpServletRequest request) throws IOException {
+		if (getLoginUser(request) == null) {
+			return true;
+		}
+		return false;
+	}
+
 	public static String encryptSHA256(String str) {
 
 		String sha = "";
@@ -39,15 +45,16 @@ public class MyUtils {
 
 		return sha;
 	}
+
 	public static int parseStringToInt(String str, int defualt_num) {
-		if(str != null) {
+		if (str != null) {
 			try {
 				return Integer.parseInt(str);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return defualt_num;
-			}			
-		}else {
+			}
+		} else {
 			return -1;
 		}
 	}

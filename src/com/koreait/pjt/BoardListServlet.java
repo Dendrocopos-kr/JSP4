@@ -19,14 +19,11 @@ public class BoardListServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (!MyUtils.loginCheck(request, response, Const.DEFUALT_PAGE)) {
-			return;
-		}
 		HttpSession hs = request.getSession();
 		request.setAttribute("user", hs.getAttribute(Const.LOGIN_USER));
 		List<BoardVO> e = BoardDAO.selectBoardList();
 		request.setAttribute("data", e);
-		ViewResolver.forward("board/list", request, response);
+		ViewResolver.forwardLoginCheck("board/list", request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

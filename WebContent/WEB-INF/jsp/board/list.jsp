@@ -50,19 +50,24 @@ div {
 #user_welcome {
 	text-align: right;
 }
+.container{
+	margin: 30px auto;
+	width: 800px;
+}
 </style>
 <body>
 	<div>
 		<h1>게시판 리스트</h1>
 	</div>
-		<div id="user_welcome">${login_user.user_nm}님 환영합니다.</div>
+	<div class="container">
+	<div id="user_welcome">✔【${login_user.user_nm}】님 환영합니다.</div>
 	<table>
 		<tr>
-			<th style="width: 60px;">번호</th>
-			<th style="width: 300px;">제목</th>
-			<th style="width: 60px;">조회수</th>
-			<th style="width: 60px;">작성자</th>
-			<th style="width: 150px;">작성일</th>
+			<th style="width: 10%;">번호</th>
+			<th style="width: 35%;">제목</th>
+			<th style="width: 15%;">조회수</th>
+			<th style="width: 15%;">작성자</th>
+			<th style="width: 15%;">작성일</th>
 		</tr>
 		<c:if test="${!empty data}">
 			<c:forEach items="${data}" var="item">
@@ -79,10 +84,11 @@ div {
 			<tr>
 				<td colspan=5 style="text-align: center;">작성글이 없습니다.</td>
 			</tr>
-		</c:if>
+		</c:if> 
 	</table>
 	<div>
 		<a href="Regmod"><button>글쓰기</button></a>
+	</div>
 	</div>
 	<script type="text/javascript">
 	function moveToDetail(PK) {

@@ -54,7 +54,7 @@ div textarea {
 	<h1>${data == null ? '글 등록' : '글 수정' }</h1>
 		<div class="err_code">${err}</div>
 		<form action="Regmod" method="post" onsubmit="return chk()" id="frm">
-			<input type="hidden" name="id" value="${data.id_board}">
+			<input type="hidden" name="id" value="${data.i_board}">
 			<div>
 				<label for="title">제목:</label><input id="title" name="title" value="${data.title}">
 			</div>

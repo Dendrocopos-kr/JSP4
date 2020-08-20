@@ -10,6 +10,14 @@ public class UserVO {
 	private String profile_img;
 	private String r_dt;
 	private String m_dt;
+	private String ipAddr;
+	
+	public String getIpAddr() {
+		return ipAddr;
+	}
+	public void setIpAddr(String ipAddr) {
+		this.ipAddr = ipAddr;
+	}
 
 	public int getHits() {
 		return hits;

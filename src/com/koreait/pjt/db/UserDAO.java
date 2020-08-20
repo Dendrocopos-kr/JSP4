@@ -52,7 +52,7 @@ public class UserDAO {
 			}
 		});
 	}
-	
+	/*
 	public static int getUserName(UserVO param) {
 		String sql = " select user_nm from t_user where i_user = ? ";
 		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
@@ -73,4 +73,5 @@ public class UserDAO {
 			}
 		});
 	}
+	*/
 }

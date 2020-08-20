@@ -36,6 +36,7 @@ public class LoginServlet extends HttpServlet {
 		case 1:// 로그인 성공
 			strMsg = "로그인 성공";
 			HttpSession hs = request.getSession();
+			param.setIpAddr(request.getRemoteAddr());
 			hs.setAttribute(Const.LOGIN_USER, param);
 			response.sendRedirect("Board/List");
 			return;

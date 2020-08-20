@@ -16,13 +16,10 @@ import com.koreait.pjt.vo.BoardVO;
 public class BoardDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if( !MyUtils.loginCheck(request, response, Const.DEFUALT_PAGE)) {
-			return;
-		}	
 		BoardVO e = new BoardVO();
 		e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"),0));
 		request.setAttribute("data", BoardDAO.selectBoard(e));
-		ViewResolver.forward("board/detail", request, response);
+		ViewResolver.forwardLoginCheck("board/detail", request, response);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);

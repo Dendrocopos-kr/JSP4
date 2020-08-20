@@ -1,4 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html>
@@ -74,12 +75,17 @@ font-weight: bold;
 			<div>
 				<a href="List">리스트보기</a>
 			</div>
+			<c:if test="${ data.i_user == login_user.i_user }"> 
 			<div>
-				<a href="" onclick="procDel(${data.i_board})">삭제</a>
+			<form action="Del" id="delfrm" method="post">
+			<input type="hidden" name="id" value="${data.i_board}">
+			<a href="#" onclick="submitDel()">삭제</a>
+			</form>
 			</div>
 			<div>
 				<a href="Regmod?id=${data.i_board}">수정</a>
 			</div>
+			</c:if>
 		</div>
 		<div class="board_body">
 			<div class="board_ctnt_title">
@@ -89,9 +95,11 @@ font-weight: bold;
 			</div>
 			<div class="profile">
 				<div>
-					작성일 :${data.r_dt}</div>
+					작성일 : ${data.r_dt}</div>
+					<div>
+					조회수 : ${data.hits}</div>
 				<div>
-					작성자 :${data.user_nm}</div>
+					작성자 : ${data.user_nm}</div>
 			</div>
 			<div class="ctnt">
 				<textarea rows="50" readonly="readonly">${data.ctnt}</textarea>
@@ -99,12 +107,11 @@ font-weight: bold;
 		</div>
 	</div>
 	<script type="text/javascript">
-	function procDel(PK){
+	function submitDel(){
 		event.preventDefault();
 		var result = confirm('삭제하시겠습니까?');
-		//alert('i_board :'+ id)
 		if(result){
-			location.href = '/Board/Del?id='+PK;
+			delfrm.submit();
 		}
 	}</script>
 </body>
