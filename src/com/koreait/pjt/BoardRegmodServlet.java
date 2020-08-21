@@ -19,7 +19,7 @@ public class BoardRegmodServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		// System.out.println("get : " + request.getParameter("id"));
 		if (request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
 			BoardVO e = new BoardVO();
 			e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
@@ -31,25 +31,21 @@ public class BoardRegmodServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
+		// System.out.println("post : " + request.getParameter("id"));
+		BoardVO e = new BoardVO();
+		e.setTitle(request.getParameter("title"));
+		e.setCtnt(request.getParameter("ctnt"));
+		e.setI_user(MyUtils.getLoginUser(request).getI_user());
+
+		if (!request.getParameter("id").isEmpty()) {
 			// 수정모드
 			System.out.println("mod");
-			BoardVO e = new BoardVO();
 			e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
-			e.setTitle(request.getParameter("title"));
-			e.setCtnt(request.getParameter("ctnt"));
-			e.setI_user(MyUtils.getLoginUser(request).getI_user());
 			BoardDAO.updateBoard(e);
 			response.sendRedirect("Detail?id=" + e.getI_board());
 		} else {
 			// 새로쓰기
 			System.out.println("write");
-			BoardVO e = new BoardVO();
-			UserVO v = new UserVO();
-			v = (UserVO) request.getSession().getAttribute(Const.LOGIN_USER);
-			e.setTitle(request.getParameter("title"));
-			e.setCtnt(request.getParameter("ctnt"));
-			e.setI_user(v.getI_user());
 			int result = BoardDAO.insertBoard(e);
 			switch (result) {
 			case 0:
@@ -58,8 +54,8 @@ public class BoardRegmodServlet extends HttpServlet {
 				break;
 			case 1:
 				BoardDAO.updateBoardPK(e);
-				response.sendRedirect("Detail?id="+e.getI_board());
-				//response.sendRedirect("List");
+				response.sendRedirect("Detail?id=" + e.getI_board());
+				// response.sendRedirect("List");
 				break;
 			}
 		}

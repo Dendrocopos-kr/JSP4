@@ -6,6 +6,45 @@
 <title>게시판</title>
 </head>
 <style>
+* {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+*:focus {
+	outline: none;
+}
+
+a button {
+	color: #58585a;
+	text-decoration: none;
+}
+
+#user_welcome {
+	text-align: right;
+	margin: 20px;
+}
+
+#logout {
+	background-color: #f5d1ca;
+	text-align: center;
+	padding: 5px;
+	color: #58585a;
+	border: none;
+	border-radius: 10px;
+	font-weight: bold;
+}
+
+#write {
+	width: 100px;
+	background-color: #f5d1ca;
+	text-align: center;
+	border: none;
+	padding: 8px;
+	color: #58585a;
+	border-radius: 10px;
+	font-weight: bold;
+}
+
 table {
 	border: black 1px solid;
 	margin: 10px auto;
@@ -37,58 +76,71 @@ td:nth-child(2) {
 	text-align: left;
 }
 
-div {
-	text-align: center;
-}
-
-.itemRow:hover td {
+.itemRow:hover {
 	background: #F2F2F2;
 	cursor: pointer;
 	color: black;
 }
 
-#user_welcome {
-	text-align: right;
-}
-.container{
-	margin: 30px auto;
+.container {
+	text-align: center; margin : 30px auto;
 	width: 800px;
+	margin: 30px auto;
+}
+
+.container h1 {
+	text-align: center;
+}
+
+#usr-color {
+	color: #ef9173;
+	font-weight: bold;
+}
+.write_div{
+text-align: right;
+margin: 20px;
 }
 </style>
 <body>
-	<div>
-		<h1>게시판 리스트</h1>
-	</div>
 	<div class="container">
-	<div id="user_welcome">✔【${login_user.user_nm}】님 환영합니다.</div>
-	<table>
-		<tr>
-			<th style="width: 10%;">번호</th>
-			<th style="width: 35%;">제목</th>
-			<th style="width: 15%;">조회수</th>
-			<th style="width: 15%;">작성자</th>
-			<th style="width: 15%;">작성일</th>
-		</tr>
-		<c:if test="${!empty data}">
-			<c:forEach items="${data}" var="item">
-				<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
-					<td>${item.i_board }</td>
-					<td>${item.title }</td>
-					<td>${item.hits }</td>
-					<td>${item.user_nm }</td>
-					<td>${item.r_dt }</td>
-				</tr>
-			</c:forEach>
-		</c:if>
-		<c:if test="${empty data}">
+		<div>
+			<h1>게시판 리스트</h1>
+		</div>
+		<div id="user_welcome">
+			✔【<span id="user-color">${login_user.user_nm}</span>】님 환영합니다. <a href="/Logout">
+				<button id="logout">로그아웃</button>
+			</a>
+		</div>
+		<div class="write_div">
+			<a href="Regmod">
+				<button id="write">글쓰기</button>
+			</a>
+		</div>
+		<table class="table">
 			<tr>
-				<td colspan=5 style="text-align: center;">작성글이 없습니다.</td>
+				<th style="width: 10%;">번호</th>
+				<th style="width: 35%;">제목</th>
+				<th style="width: 15%;">조회수</th>
+				<th style="width: 15%;">작성자</th>
+				<th style="width: 15%;">작성일</th>
 			</tr>
-		</c:if> 
-	</table>
-	<div>
-		<a href="Regmod"><button>글쓰기</button></a>
-	</div>
+			<c:if test="${!empty data}">
+				<c:forEach items="${data}" var="item">
+					<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
+						<td>${item.i_board }</td>
+						<td>${item.title }</td>
+						<td>${item.hits }</td>
+						<td>${item.user_nm }</td>
+						<td>${item.r_dt }</td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<c:if test="${empty data}">
+				<tr>
+					<td colspan=5 style="text-align: center;">작성글이 없습니다.</td>
+				</tr>
+			</c:if>
+		</table>
 	</div>
 	<script type="text/javascript">
 	function moveToDetail(PK) {

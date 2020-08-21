@@ -53,25 +53,15 @@ public class UserDAO {
 		});
 	}
 	/*
-	public static int getUserName(UserVO param) {
-		String sql = " select user_nm from t_user where i_user = ? ";
-		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
-			
-			@Override
-			public void prepard(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, param.getI_user());
-			}
-			
-			@Override
-			public int executeQuery(ResultSet rs) throws SQLException {
-				if(rs.next()) {
-					String dbNM = rs.getNString("user_nm");
-					param.setUser_nm(dbNM);
-					return 1;
-				}
-				return 0;
-			}
-		});
-	}
-	*/
+	 * public static int getUserName(UserVO param) { String sql =
+	 * " select user_nm from t_user where i_user = ? "; return
+	 * JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+	 * 
+	 * @Override public void prepard(PreparedStatement ps) throws SQLException {
+	 * ps.setInt(1, param.getI_user()); }
+	 * 
+	 * @Override public int executeQuery(ResultSet rs) throws SQLException {
+	 * if(rs.next()) { String dbNM = rs.getNString("user_nm");
+	 * param.setUser_nm(dbNM); return 1; } return 0; } }); }
+	 */
 }

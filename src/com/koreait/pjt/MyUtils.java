@@ -58,4 +58,9 @@ public class MyUtils {
 			return -1;
 		}
 	}
+
+	public static void setLoginUser(HttpServletRequest request, UserVO e) {
+		HttpSession hs = request.getSession();
+		hs.setAttribute(Const.LOGIN_USER, e);
+	}
 }

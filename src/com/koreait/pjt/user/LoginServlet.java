@@ -21,6 +21,10 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		if(MyUtils.getLoginUser(request)!=null) {
+			response.sendRedirect("/Board/List");
+			return;
+		}
 		ViewResolver.forward("user/login", request, response);
 	}
 
@@ -35,10 +39,9 @@ public class LoginServlet extends HttpServlet {
 		switch (result) {
 		case 1:// 로그인 성공
 			strMsg = "로그인 성공";
-			HttpSession hs = request.getSession();
 			param.setIpAddr(request.getRemoteAddr());
-			hs.setAttribute(Const.LOGIN_USER, param);
-			response.sendRedirect("Board/List");
+			MyUtils.setLoginUser(request, param);
+			response.sendRedirect("/Board/List");
 			return;
 		case 2:// 비번틀림
 			strMsg = "비밀번호를 확인해주세요.";
@@ -50,7 +53,7 @@ public class LoginServlet extends HttpServlet {
 			strMsg = "애러발생";
 			break;
 		}
-		request.setAttribute("Msg",strMsg);
+		request.setAttribute("Msg", strMsg);
 		request.setAttribute("id", param.getUser_id());
 		param = null;
 		doGet(request, response);

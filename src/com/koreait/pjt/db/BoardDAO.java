@@ -15,7 +15,7 @@ public class BoardDAO {
 		BoardDomain e = new BoardDomain();
 		String sql = " SELECT a.i_board, a.title,a.ctnt, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm "
 				+ " FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user where i_board=?";
-		//System.out.println("selectBoard");
+		// System.out.println("selectBoard");
 		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 
 			@Override
@@ -79,7 +79,7 @@ public class BoardDAO {
 	public static int insertBoard(BoardVO e) {
 		String sql = " insert into t_board4 " + " (i_board, title, ctnt ,i_user ) " + "values"
 				+ " (seq_board4.nextval , ? , ? ,?) ";
-		//System.out.println("insertBoard");
+		// System.out.println("insertBoard");
 
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
 
@@ -92,19 +92,19 @@ public class BoardDAO {
 			}
 		});
 	}
-	
+
 	public static int updateBoardPK(BoardVO e) {
 		String sql = " select MAX(i_board) from t_board4 where i_user = ? ";
 		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
-			
+
 			@Override
 			public void prepard(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, e.getI_user());				
+				ps.setInt(1, e.getI_user());
 			}
-			
+
 			@Override
 			public int executeQuery(ResultSet rs) throws SQLException {
-				if(rs.next()) {
+				if (rs.next()) {
 					e.setI_board(rs.getInt(1));
 					return 1;
 				}
@@ -114,12 +114,10 @@ public class BoardDAO {
 	}
 
 	public static int updateBoard(BoardVO e) {
-		String sql =  " update  t_board4  set  title = ?, ctnt = ?"
-				+ "where"
-				+ " i_board = ? and i_user = ? ";
-		//System.out.println("updateBoard");
+		String sql = " update  t_board4  set  title = ?, ctnt = ?" + "where" + " i_board = ? and i_user = ? ";
+		// System.out.println("updateBoard");
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
-			
+
 			@Override
 			public int update(PreparedStatement ps) throws SQLException {
 				ps.setNString(1, e.getTitle());
@@ -130,11 +128,11 @@ public class BoardDAO {
 			}
 		});
 	}
-	
+
 	public static int deleteBoard(BoardVO e) {
 		String sql = " delete t_board4 where i_board=? AND i_user=?";
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
-			
+
 			@Override
 			public int update(PreparedStatement ps) throws SQLException {
 				ps.setInt(1, e.getI_board());
@@ -142,5 +140,20 @@ public class BoardDAO {
 				return ps.executeUpdate();
 			}
 		});
+	}
+
+	public static void addHits(BoardVO e) {
+		String sql = " update t_board4 set hits= ? where i_board =? ";
+		JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+
+			@Override
+			public int update(PreparedStatement ps) throws SQLException {
+				e.setHits(e.getHits() + 1);
+				ps.setInt(1, e.getHits());
+				ps.setInt(2, e.getI_board());
+				return ps.executeUpdate();
+			}
+		});
+
 	}
 }

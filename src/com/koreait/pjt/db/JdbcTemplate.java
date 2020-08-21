@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTemplate {
-	public static int executeQuery(String sql, JdbcSelectInterface jdbc){
+	public static int executeQuery(String sql, JdbcSelectInterface jdbc) {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -18,28 +18,28 @@ public class JdbcTemplate {
 			jdbc.prepard(ps);
 			rs = ps.executeQuery();
 			result = jdbc.executeQuery(rs);
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			DBConnection.close(conn, ps, rs);
 		}
-	
+
 		return result;
 	}
-	
-	public static int executeUpdate(String sql,JdbcUpdateInterface jdbc) {
+
+	public static int executeUpdate(String sql, JdbcUpdateInterface jdbc) {
 		int result = 0;
 		Connection conn = null;
 		PreparedStatement ps = null;
-		
+
 		try {
 			conn = DBConnection.getConn();
 			ps = conn.prepareStatement(sql);
 			result = jdbc.update(ps);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			DBConnection.close(conn, ps);
 		}
 		return result;
