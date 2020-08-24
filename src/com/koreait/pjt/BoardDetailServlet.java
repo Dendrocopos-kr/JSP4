@@ -27,10 +27,9 @@ public class BoardDetailServlet extends HttpServlet {
 			return;
 		}
 
-		BoardVO e = new BoardDomain();
+		BoardDomain e = new BoardDomain();
 		e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
-		e = BoardDAO.selectBoard(e);
-		request.setAttribute("data", e);
+		//e = BoardDAO.selectBoard(e);
 
 		ServletContext application = getServletContext();
 		Integer readI_User = (Integer) application.getAttribute("read_" + e.getI_board());
@@ -40,12 +39,39 @@ public class BoardDetailServlet extends HttpServlet {
 			}
 			application.setAttribute("read_" + e.getI_board(), loginUser.getI_user());
 		}
+		
+		//BoardDomain f = new BoardDomain();
+		e.setI_board(e.getI_board());
+		e.setI_user(MyUtils.getLoginUser(request).getI_user());
+		e = BoardDAO.selectBoard(e);
+		request.setAttribute("data", e);
+		
 
 		ViewResolver.forwardLoginCheck("board/detail", request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		BoardVO e = new BoardDomain();
+		e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
+		BoardDomain f = new BoardDomain();
+		f.setI_board(e.getI_board());
+		f.setI_user(MyUtils.getLoginUser(request).getI_user());
+		
+		if (request.getParameter("like") != null) {
+			if (request.getParameter("like").equals("1")) {
+				BoardDAO.insertBoardLike(f);
+				//System.out.println(BoardDAO.insertBoardLike(f));
+				//System.out.println("좋아요추가");
+			} else {
+				// 좋아요 취소
+				BoardDAO.deleteBoardLike(f);
+				//System.out.println(BoardDAO.deleteBoardLike(f));
+				//System.out.println("좋아요취소");
+			}
+		}
+		
 		doGet(request, response);
 	}
 

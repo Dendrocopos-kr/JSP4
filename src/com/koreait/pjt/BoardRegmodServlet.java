@@ -7,11 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.koreait.pjt.db.BoardDAO;
+import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
-import com.koreait.pjt.vo.UserVO;
 
 @WebServlet("/Board/Regmod")
 public class BoardRegmodServlet extends HttpServlet {
@@ -21,7 +20,7 @@ public class BoardRegmodServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// System.out.println("get : " + request.getParameter("id"));
 		if (request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
-			BoardVO e = new BoardVO();
+			BoardDomain e = new BoardDomain();
 			e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
 			request.setAttribute("data", BoardDAO.selectBoard(e));
 		}

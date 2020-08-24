@@ -10,17 +10,90 @@ import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
 import com.koreait.pjt.vo.UserVO;
 
-public class BoardDAO {
-	public static BoardVO selectBoard(BoardVO param) {
+public class BoardDAO {	
+	public static int deleteBoardLike(BoardDomain param) {
+		String sql = " delete t_board4_like where i_user = ? and i_board = ? ";
+		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+			
+			@Override
+			public int update(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_user());
+				ps.setInt(2, param.getI_board());
+				return ps.executeUpdate();
+			}
+		});
+	}
+	public static int insertBoardLike(BoardDomain param) {
+		String sql = " INSERT INTO t_board4_like (" + 
+				"    i_user," + 
+				"    i_board" + 
+				") VALUES (" + 
+				"    ?," + 
+				"    ?" + 
+				") ";
+		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+			
+			@Override
+			public int update(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_user());
+				ps.setInt(2, param.getI_board());
+				return ps.executeUpdate();
+			}
+		});
+	}
+	/*
+	public static BoardDomain selectBoardLike(BoardDomain param) {
 		BoardDomain e = new BoardDomain();
-		String sql = " SELECT a.i_board, a.title,a.ctnt, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm "
-				+ " FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user where i_board=?";
-		// System.out.println("selectBoard");
+		String sql = " select A.*,C.user_nm,decode(b.i_user, NULL, 0, 1) AS yn_like FROM "
+				+ " t_board4       a "
+				+ " LEFT JOIN t_board4_like  b ON a.i_board = b.i_board "
+				+ " AND b.i_user = ? "
+				+ " INNER JOIN t_user         c ON a.i_user = c.i_user "
+				+ " WHERE "
+				+ " a.i_board = ? ";
+		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+			
+			@Override
+			public void prepard(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_user());
+				ps.setInt(2, param.getI_board());
+			}
+			
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				if (rs.next()) {
+					e.setI_board(rs.getInt("i_board"));
+					e.setTitle(rs.getNString("title"));
+					e.setCtnt(rs.getNString("ctnt"));
+					e.setHits(rs.getInt("hits"));
+					e.setI_user(rs.getInt("i_user"));
+					e.setR_dt(rs.getNString("r_dt"));
+					e.setUser_nm(rs.getNString("user_nm"));
+					e.setLike(rs.getInt("yn_like"));
+					return 1;
+				}
+				return 0;
+			}
+		});
+		
+		return e;
+	}
+	*/
+	public static BoardDomain selectBoard(BoardDomain param) {
+		BoardDomain e = new BoardDomain();
+		String sql = " select A.*,C.user_nm,decode(b.i_user, NULL, 0, 1) AS yn_like FROM "
+				+ " t_board4       a "
+				+ " LEFT JOIN t_board4_like  b ON a.i_board = b.i_board "
+				+ " AND b.i_user = ? "
+				+ " INNER JOIN t_user         c ON a.i_user = c.i_user "
+				+ " WHERE "
+				+ " a.i_board = ? ";
 		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 
 			@Override
 			public void prepard(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, param.getI_board());
+				ps.setInt(1, param.getI_user());
+				ps.setInt(2, param.getI_board());
 			}
 
 			@Override
@@ -33,6 +106,7 @@ public class BoardDAO {
 					e.setI_user(rs.getInt("i_user"));
 					e.setR_dt(rs.getNString("r_dt"));
 					e.setUser_nm(rs.getNString("user_nm"));
+					e.setLike(rs.getInt("yn_like"));
 					return 1;
 				}
 				return 0;

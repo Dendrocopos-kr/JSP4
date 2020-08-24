@@ -7,9 +7,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.koreait.pjt.vo.BoardVO;
+import com.koreait.pjt.vo.UserLoginHistoryVO;
 import com.koreait.pjt.vo.UserVO;
 
 public class UserDAO {
+	public static int insUserLoginHistory(UserLoginHistoryVO param) {
+		String sql = " insert into t_user_loginhistory "
+				+ " (i_history,i_user,ip_addr,os,browser) "
+				+ " values "
+				+ " (seq_userloginhistory.nextval,?,?,?,?) ";
+		
+		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+			
+			@Override
+			public int update(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_user());
+				ps.setNString(2, param.getIp_addr());
+				ps.setNString(3, param.getOs());
+				ps.setNString(4, param.getBrower());
+				return ps.executeUpdate();
+			}
+		});
+	}
+	
 	public static int insertUser(UserVO param) {
 		String sql = " insert into t_user " + " (i_user,user_id,user_pw,user_nm,mail) " + " VALUES "
 				+ " (seq_user.nextval,?,?,?,?) ";
