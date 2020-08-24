@@ -13,77 +13,95 @@
 	margin: 0 auto;
 	display: flex;
 }
-
-.main_body div, .main_body textarea{
-	margin: 10px;
-}
 .main_body textarea{
-resize: none;
-margin:0px;
+	resize: none;
+	border:none;
+	border-radius: 10px;
+	background: #FDF2F0;
+}
+a button {
+	width: 95%;
+	background-color: #f5d1ca;
+	text-align: center;
+	border: none;
+	padding: 8px;
+	color: #58585a;
+	border-radius: 10px;
+	font-weight: bold;
+	margin-bottom: 20px;
 }
 
 .ctnt {
 	display: flex;
-	border: black 1px solid;
+	<!--border: black 1px solid;-->
 	height: 400px;
 	padding: 0px;
 	flex-direction: column;
 	justify-content: space-between;
+	border-radius: 10px;
+	border: #DEB3CF 1px solid;
+	margin:10px;
 }
-
-.board_ctnt_title, .profile {
-	border: black 1px solid;
-	display: flex;
-	margin-bottom: 30px;
-}
-
-.board_ctnt_title div {
-	margin: 10px;
-}
-
 .menu {
-	border: 1px solid black;
 	padding: 10px;
 	width: 20%;
+	text-align: center;
+	background: #FADCDA;
+	border-radius: 10px;
+	margin:10px;
 }
 
 .board_body {
 	width: 75%;
 }
 
-.profile {
-	justify-content: space-between;
-}
 .err{
 	color:red;
 	font-weight: bold;
 }
-.title{
-font-weight: bold;
-	font-size: 2em;
+.board_ctnt_title ,.profile,.board_profile{
+	justify-content: space-between;
+	background: #EACACB;
+	display: flex;
+	margin-bottom: 30px;
+	border-radius: 10px;
+	padding: 10px;
+	margin:10px;
 }
+.menu_info{
+	padding:30px;
+}
+hr{
+border: white 2px solid;
+margin-bottom: 30px;
+}
+
+
 </style>
 <body>
 	<div class="main_body">
 		<div class="menu">
-			<div>
+			<div class="menu_info">
 				<B>게시판 메뉴</B>
 			</div>
 			<hr>
+			<!-- 
 			<div>
-				게시글 번호 :${data.i_board}</div>
+				게시글 번호 :${data.i_board}
+				</div>
+			 -->
 			<div>
-				<a href="List">리스트보기</a>
+				<a href="List"> <button>리스트보기</button></a>
 			</div>
 			<c:if test="${ data.i_user == login_user.i_user }"> 
 			<div>
 			<form action="Del" id="delfrm" method="post">
 			<input type="hidden" name="id" value="${data.i_board}">
-			<a href="#" onclick="submitDel()">삭제</a>
+			<a href="#" onclick="submitDel()"><button>삭제</button></a>
 			</form>
 			</div>
 			<div>
-				<a href="Regmod?id=${data.i_board}">수정</a>
+				<a href="Regmod?id=${data.i_board}"><button>수정</button></a>
 			</div>
 			</c:if>
 		</div>
@@ -93,16 +111,18 @@ font-weight: bold;
 					제목 :${data.title}
 					<span class="err">${err}</span></div>
 			</div>
-			<div class="profile">
+			<div class="board_profile">
 				<div>
 					작성일 : ${data.r_dt}</div>
 					<div>
 					조회수 : ${data.hits}</div>
-				<div>
-					작성자 : ${data.user_nm}</div>
 			</div>
 			<div class="ctnt">
 				<textarea rows="50" readonly="readonly">${data.ctnt}</textarea>
+			</div>
+			<div class="profile">
+				<div>
+					작성자 : ${data.user_nm}</div>
 			</div>
 		</div>
 	</div>

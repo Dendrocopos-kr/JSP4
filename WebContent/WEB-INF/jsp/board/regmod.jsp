@@ -14,7 +14,16 @@
 	flex-direction: column;
 	align-items: center;
 }
-
+a button ,div input{
+	width: 100px;
+	background-color: #f5d1ca;
+	text-align: center;
+	border: none;
+	padding: 8px;
+	color: #58585a;
+	border-radius: 10px;
+	font-weight: bold;
+}
 form {
 	display: flex;
 	flex-direction: column;
@@ -41,6 +50,7 @@ div textarea, div input {
 
 div textarea {
 	height: 400px;
+	resize: none;
 }
 
 .err_code {
