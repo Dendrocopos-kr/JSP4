@@ -27,10 +27,11 @@ public class BoardDetailServlet extends HttpServlet {
 			return;
 		}
 
-		BoardDomain e = new BoardDomain();
+		BoardVO e = new BoardVO();
 		e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
-		//e = BoardDAO.selectBoard(e);
+		e.setI_user(MyUtils.getLoginUser(request).getI_user());
 
+		// -----------------------[중복 조회수 금지 + 자기자신글 조회수 업데이트 금지 start]
 		ServletContext application = getServletContext();
 		Integer readI_User = (Integer) application.getAttribute("read_" + e.getI_board());
 		if (readI_User == null || readI_User != loginUser.getI_user()) {
@@ -39,13 +40,9 @@ public class BoardDetailServlet extends HttpServlet {
 			}
 			application.setAttribute("read_" + e.getI_board(), loginUser.getI_user());
 		}
-		
-		//BoardDomain f = new BoardDomain();
-		e.setI_board(e.getI_board());
-		e.setI_user(MyUtils.getLoginUser(request).getI_user());
-		e = BoardDAO.selectBoard(e);
-		request.setAttribute("data", e);
-		
+		// -----------------------[중복 조회수 금지 + 자기자신글 조회수 업데이트 금지 end]
+
+		request.setAttribute("data", BoardDAO.selectBoard(e));
 
 		ViewResolver.forwardLoginCheck("board/detail", request, response);
 	}
@@ -53,25 +50,17 @@ public class BoardDetailServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		BoardVO e = new BoardDomain();
-		e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
-		BoardDomain f = new BoardDomain();
-		f.setI_board(e.getI_board());
-		f.setI_user(MyUtils.getLoginUser(request).getI_user());
-		
 		if (request.getParameter("like") != null) {
+			BoardVO e = new BoardVO();
+			e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
+			e.setI_user(MyUtils.getLoginUser(request).getI_user());
 			if (request.getParameter("like").equals("1")) {
-				BoardDAO.insertBoardLike(f);
-				//System.out.println(BoardDAO.insertBoardLike(f));
-				//System.out.println("좋아요추가");
+				BoardDAO.insertBoardLike(e);
 			} else {
-				// 좋아요 취소
-				BoardDAO.deleteBoardLike(f);
-				//System.out.println(BoardDAO.deleteBoardLike(f));
-				//System.out.println("좋아요취소");
+				BoardDAO.deleteBoardLike(e);
 			}
 		}
-		
+
 		doGet(request, response);
 	}
 

@@ -11,7 +11,7 @@ import com.koreait.pjt.vo.BoardVO;
 import com.koreait.pjt.vo.UserVO;
 
 public class BoardDAO {	
-	public static int deleteBoardLike(BoardDomain param) {
+	public static int deleteBoardLike(BoardVO param) {
 		String sql = " delete t_board4_like where i_user = ? and i_board = ? ";
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
 			
@@ -23,7 +23,7 @@ public class BoardDAO {
 			}
 		});
 	}
-	public static int insertBoardLike(BoardDomain param) {
+	public static int insertBoardLike(BoardVO param) {
 		String sql = " INSERT INTO t_board4_like (" + 
 				"    i_user," + 
 				"    i_board" + 
@@ -79,7 +79,7 @@ public class BoardDAO {
 		return e;
 	}
 	*/
-	public static BoardDomain selectBoard(BoardDomain param) {
+	public static BoardDomain selectBoard(BoardVO param) {
 		BoardDomain e = new BoardDomain();
 		String sql = " select A.*,C.user_nm,decode(b.i_user, NULL, 0, 1) AS yn_like FROM "
 				+ " t_board4       a "

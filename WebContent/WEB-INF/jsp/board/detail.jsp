@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>${data.title}</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <style>
 .main_body {
@@ -22,14 +23,9 @@
 }
 
 .like {
-	width: 95%;
-	background-color: #f5d1ca;
+	background: #EACACB;
 	text-align: center;
 	border: none;
-	padding: 8px;
-	color: #58585a;
-	border-radius: 10px;
-	font-weight: bold;
 }
 
 .menu_btn {
@@ -45,8 +41,7 @@
 }
 
 .ctnt {
-	display: flex; <!--
-	border: black 1px solid; -->
+	display: flex;
 	height: 400px;
 	padding: 0px;
 	flex-direction: column;
@@ -92,6 +87,32 @@ hr {
 	border: white 2px solid;
 	margin-bottom: 30px;
 }
+
+.material-icons {
+	font-family: 'Material Icons';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 24px; /* Preferred icon size */
+	display: inline-block;
+	line-height: 1;
+	text-transform: none;
+	letter-spacing: normal;
+	word-wrap: normal;
+	white-space: nowrap;
+	direction: ltr;
+	color: red;
+	/* Support for all WebKit browsers. */
+	-webkit-font-smoothing: antialiased;
+	/* Support for Safari and Chrome. */
+	text-rendering: optimizeLegibility;
+	/* Support for Firefox. */
+	-moz-osx-font-smoothing: grayscale;
+	/* Support for IE. */
+	font-feature-settings: 'liga';
+}
+.like:hover{
+cursor: pointer;
+}
 </style>
 <body>
 	<div class="main_body">
@@ -130,21 +151,21 @@ hr {
 			<div class="board_profile">
 				<div>작성일 : ${data.r_dt}</div>
 				<c:if test="${data.like == 1}">
-					<form action="#" id="like" method="post">
-						<input type="hidden" name="like" value="0"><a href="?id=${data.i_board}&like=0"><button class="like">❤️</button></a>
+					<!-- <form action="Like" id="like" method="post"> -->
+					<form action="" id="like" method="post">
+						<input type="hidden" name="like" value="0"><input type="hidden" name="id" value="${data.i_board}"><a href="?id=${data.i_board}&like=0"><button class="like">
+								<span class="material-icons"> favorite </span>
+							</button></a>
 					</form>
-
 				</c:if>
-
 				<c:if test="${data.like == 0}">
-					<form action="#" id="like" method="post">
-						<input type="hidden" name="like" value="1"><a href="?id=${data.i_board}&like=1"><button class="like">🖤</button></a>
+					<!--<form action="Like" id="like" method="post"> -->
+					<form action="" id="like" method="post">
+						<input type="hidden" name="like" value="1"><input type="hidden" name="id" value="${data.i_board}"><a href="?id=${data.i_board}&like=1"><button class="like">
+								<span class="material-icons"> favorite_border </span>
+							</button></a>
 					</form>
-					
-
-
 				</c:if>
-
 				<div>조회수 : ${data.hits}</div>
 			</div>
 			<div class="ctnt">
