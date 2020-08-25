@@ -81,7 +81,9 @@ public class BoardDAO {
 	*/
 	public static BoardDomain selectBoard(BoardVO param) {
 		BoardDomain e = new BoardDomain();
-		String sql = " select A.*,C.user_nm,decode(b.i_user, NULL, 0, 1) AS yn_like FROM "
+		String sql = " select a.i_board, a.title, a.ctnt, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt,C.user_nm,decode(b.i_user, NULL, 0, 1) AS yn_like,"
+				+ " (select count(*) blc from t_board4_like GROUP by i_board having i_board =?) as like_count "
+				+ " from"
 				+ " t_board4       a "
 				+ " LEFT JOIN t_board4_like  b ON a.i_board = b.i_board "
 				+ " AND b.i_user = ? "
@@ -92,8 +94,9 @@ public class BoardDAO {
 
 			@Override
 			public void prepard(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, param.getI_user());
-				ps.setInt(2, param.getI_board());
+				ps.setInt(1, param.getI_board());
+				ps.setInt(2, param.getI_user());
+				ps.setInt(3, param.getI_board());
 			}
 
 			@Override
@@ -107,6 +110,7 @@ public class BoardDAO {
 					e.setR_dt(rs.getNString("r_dt"));
 					e.setUser_nm(rs.getNString("user_nm"));
 					e.setLike(rs.getInt("yn_like"));
+					e.setLike_count(rs.getInt("like_count"));
 					return 1;
 				}
 				return 0;
@@ -114,7 +118,6 @@ public class BoardDAO {
 		});
 		return e;
 	}
-
 	public static List<BoardVO> selectBoardList() {
 		String sql = " SELECT a.i_board, a.title, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm "
 				+ " FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user ORDER BY i_board DESC";
@@ -149,7 +152,6 @@ public class BoardDAO {
 		});
 		return list;
 	}
-
 	public static int insertBoard(BoardVO e) {
 		String sql = " insert into t_board4 " + " (i_board, title, ctnt ,i_user ) " + "values"
 				+ " (seq_board4.nextval , ? , ? ,?) ";
@@ -166,7 +168,6 @@ public class BoardDAO {
 			}
 		});
 	}
-
 	public static int updateBoardPK(BoardVO e) {
 		String sql = " select MAX(i_board) from t_board4 where i_user = ? ";
 		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
@@ -186,7 +187,6 @@ public class BoardDAO {
 			}
 		});
 	}
-
 	public static int updateBoard(BoardVO e) {
 		String sql = " update  t_board4  set  title = ?, ctnt = ?" + "where" + " i_board = ? and i_user = ? ";
 		// System.out.println("updateBoard");
@@ -202,7 +202,6 @@ public class BoardDAO {
 			}
 		});
 	}
-
 	public static int deleteBoard(BoardVO e) {
 		String sql = " delete t_board4 where i_board=? AND i_user=?";
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
@@ -215,7 +214,6 @@ public class BoardDAO {
 			}
 		});
 	}
-
 	public static void addHits(BoardVO e) {
 		String sql = " update t_board4 set hits= ? where i_board =? ";
 		JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {

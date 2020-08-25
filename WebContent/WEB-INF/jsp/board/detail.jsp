@@ -154,7 +154,7 @@ cursor: pointer;
 					<!-- <form action="Like" id="like" method="post"> -->
 					<form action="" id="like" method="post">
 						<input type="hidden" name="like" value="0"><input type="hidden" name="id" value="${data.i_board}"><a href="?id=${data.i_board}&like=0"><button class="like">
-								<span class="material-icons"> favorite </span>
+								<span class="material-icons"> favorite</span><sup> ${data.like_count } </sup>
 							</button></a>
 					</form>
 				</c:if>
@@ -162,7 +162,7 @@ cursor: pointer;
 					<!--<form action="Like" id="like" method="post"> -->
 					<form action="" id="like" method="post">
 						<input type="hidden" name="like" value="1"><input type="hidden" name="id" value="${data.i_board}"><a href="?id=${data.i_board}&like=1"><button class="like">
-								<span class="material-icons"> favorite_border </span>
+								<span class="material-icons"> favorite_border</span><sup> ${data.like_count } </sup>
 							</button></a>
 					</form>
 				</c:if>

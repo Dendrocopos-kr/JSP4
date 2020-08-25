@@ -45,6 +45,9 @@ public class MyUtils {
 
 		return sha;
 	}
+	public static int parseStringToInt(String str) {
+		return parseStringToInt(str,0);
+	}
 
 	public static int parseStringToInt(String str, int defualt_num) {
 		if (str != null) {
