@@ -18,10 +18,10 @@ public class BoardRegmodServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// System.out.println("get : " + request.getParameter("id"));
-		if (request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
+		System.out.println("get : " + MyUtils.getIntParamater(request, "id"));
+		if (MyUtils.getIntParamater(request, "id") != 0) {
 			BoardDomain e = new BoardDomain();
-			e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
+			e.setI_board(MyUtils.getIntParamater(request, "id"));
 			request.setAttribute("data", BoardDAO.selectBoard(e));
 		}
 
@@ -36,7 +36,7 @@ public class BoardRegmodServlet extends HttpServlet {
 		e.setCtnt(request.getParameter("ctnt"));
 		e.setI_user(MyUtils.getLoginUser(request).getI_user());
 
-		if (!request.getParameter("id").isEmpty()) {
+		if ( MyUtils.getIntParamater(request, "id") != 0) {
 			// 수정모드
 			System.out.println("mod");
 			e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));

@@ -1,6 +1,7 @@
 package com.koreait.pjt;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.koreait.pjt.db.BoardCmtDAO;
 import com.koreait.pjt.db.BoardDAO;
+import com.koreait.pjt.vo.BoardCmtVO;
 import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
 import com.koreait.pjt.vo.UserVO;
@@ -28,10 +31,9 @@ public class BoardDetailServlet extends HttpServlet {
 		}
 
 		BoardVO param = new BoardVO();
-		param.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
+		param.setI_board(MyUtils.getIntParamater(request, "id"));
 		param.setI_user(MyUtils.getLoginUser(request).getI_user());
 		BoardDomain f = BoardDAO.selectBoard(param);
-		
 		// -----------------------[중복 조회수 금지 + 자기자신글 조회수 업데이트 금지 start]
 		ServletContext application = getServletContext();
 		Integer readI_User = (Integer) application.getAttribute("read_" + f.getI_board());
@@ -43,14 +45,27 @@ public class BoardDetailServlet extends HttpServlet {
 		}
 		// -----------------------[중복 조회수 금지 + 자기자신글 조회수 업데이트 금지 end]
 
-		request.setAttribute("data", f);
+		// ----------------[get방식 start]
+		/*
+		if (request.getParameter("like") != null) {
+			if (request.getParameter("like").equals("1")) {
+				BoardDAO.insertBoardLike(param);
+			} else {
+				BoardDAO.deleteBoardLike(param);
+			}
+		}
+		*/
+		// ----------------[get방식 end]
 
+		request.setAttribute("data", f);
+		request.setAttribute("cmtData", BoardCmtDAO.selectBoardCmtList(param));
 		ViewResolver.forwardLoginCheck("board/detail", request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		//-----------------[post방식 start]
+		/*
 		if (request.getParameter("like") != null) {
 			BoardDomain e = new BoardDomain();
 			e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
@@ -61,7 +76,8 @@ public class BoardDetailServlet extends HttpServlet {
 				BoardDAO.deleteBoardLike(e);
 			}
 		}
-
+		*/
+		//-----------------[post방식 end]
 		doGet(request, response);
 	}
 

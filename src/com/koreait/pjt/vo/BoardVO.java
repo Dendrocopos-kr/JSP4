@@ -8,7 +8,14 @@ public class BoardVO {
 	private int i_user;
 	private String r_dt;
 	private String m_dt;
+	private int is_del;
 
+	public int getIs_del() {
+		return is_del;
+	}
+	public void setIs_del(int is_del) {
+		this.is_del = is_del;
+	}
 	public int getI_board() {
 		return i_board;
 	}

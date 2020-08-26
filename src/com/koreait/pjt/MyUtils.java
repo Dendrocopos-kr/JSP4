@@ -10,6 +10,10 @@ import javax.servlet.http.HttpSession;
 import com.koreait.pjt.vo.UserVO;
 
 public class MyUtils {
+	public static int getIntParamater(HttpServletRequest request, String KeyName) {
+		return parseStringToInt(request.getParameter(KeyName));
+	}
+
 	public static UserVO getLoginUser(HttpServletRequest request) {
 		HttpSession hs = request.getSession();
 		return (UserVO) hs.getAttribute(Const.LOGIN_USER);
@@ -45,20 +49,17 @@ public class MyUtils {
 
 		return sha;
 	}
+
 	public static int parseStringToInt(String str) {
-		return parseStringToInt(str,0);
+		return parseStringToInt(str, 0);
 	}
 
 	public static int parseStringToInt(String str, int defualt_num) {
-		if (str != null) {
-			try {
-				return Integer.parseInt(str);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return defualt_num;
-			}
-		} else {
-			return -1;
+		try {
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return defualt_num;
 		}
 	}
 

@@ -23,7 +23,7 @@ public class BoardDelServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// System.out.println("del-post:("+request.getParameter("id")+")");
-		if (request.getParameter("id") == null) {
+		if (MyUtils.getIntParamater(request, "id") == 0) {
 			response.sendRedirect("List");
 		} else {
 			UserVO loginUser = MyUtils.getLoginUser(request);
@@ -32,7 +32,7 @@ public class BoardDelServlet extends HttpServlet {
 				return;
 			}
 			BoardVO e = new BoardVO();
-			e.setI_board(MyUtils.parseStringToInt(request.getParameter("id"), 0));
+			e.setI_board(MyUtils.getIntParamater(request, "id"));
 			e.setI_user(loginUser.getI_user());
 			int result = BoardDAO.deleteBoard(e);
 			// System.out.println("삭제 결과 :"+result);

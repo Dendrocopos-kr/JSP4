@@ -59,14 +59,7 @@ th, td {
 	text-align: center;
 	color: black;
 	border: none;
-}
-
-tr:nth-child(odd) {
-	background: #F2DFDF;
-}
-
-tr:nth-child(even) {
-	background: #F2BBBB;
+	border-bottom: grey solid 1px;
 }
 
 th {
@@ -87,7 +80,7 @@ td:nth-child(2) {
 
 .container {
 	text-align: center; margin : 30px auto;
-	width: 800px;
+	width: 95%;
 	margin: 30px auto;
 }
 
@@ -126,7 +119,7 @@ create
 		<table class="table">
 			<tr>
 				<th style="width: 10%;">번호</th>
-				<th style="width: 35%;">제목</th>
+				<th style="width: 50%;">제목</th>
 				<th style="width: 15%;">조회수</th>
 				<th style="width: 15%;">작성자</th>
 				<th style="width: 15%;">작성일</th>

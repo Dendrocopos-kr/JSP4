@@ -2,7 +2,6 @@ package com.koreait.pjt.vo;
 
 public class BoardDomain extends BoardVO{
 	private String user_nm;
-	
 	private int like;
 	private int like_count;
 	
