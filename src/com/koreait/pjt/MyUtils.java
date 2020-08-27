@@ -58,7 +58,8 @@ public class MyUtils {
 		try {
 			return Integer.parseInt(str);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("null 이거나 숫자가 아닙니다.");
 			return defualt_num;
 		}
 	}

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.koreait.pjt.db.BoardDAO;
+import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
 
 @WebServlet("/Board/List")
@@ -19,10 +20,18 @@ public class BoardListServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession hs = request.getSession();
-		request.setAttribute("user", hs.getAttribute(Const.LOGIN_USER));
-		List<BoardVO> e = BoardDAO.selectBoardList();
-		request.setAttribute("data", e);
+		//HttpSession hs = request.getSession();
+		//request.setAttribute("user", hs.getAttribute(Const.LOGIN_USER));
+		
+		int page = MyUtils.getIntParamater(request, "page") ;
+		page = page==0 ? 1 : page;
+		BoardDomain param = new BoardDomain();
+		param.setRecode_cnt(Const.RECODE_CNT);
+		
+		request.setAttribute("currentPage", page);
+		request.setAttribute("paging", BoardDAO.selectPagingCnt(param));
+		request.setAttribute("data", BoardDAO.selectBoardList_Page(page, Const.RECODE_CNT));
+		//request.setAttribute("data", BoardDAO.selectBoardList());
 		ViewResolver.forwardLoginCheck("board/list", request, response);
 	}
 

@@ -63,7 +63,7 @@ public class BoardCmtDAO {
 	}
 
 	public static int updateCmt(BoardCmtVO param) {
-		String sql = " update  t_board4_cmt  set cmt = ? where i_cmt =? and i_board = ? and i_user = ? ";
+		String sql = " update  t_board4_cmt  set cmt = ?,m_dt = sysdate where i_cmt =? and i_board = ? and i_user = ? ";
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
 
 			@Override

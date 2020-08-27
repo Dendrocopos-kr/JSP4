@@ -18,31 +18,35 @@ public class BoardCmtServlet extends HttpServlet {
 	// 댓글(삭제)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if(MyUtils.getIntParamater(request, "cmt_id") != 0 ) {
+		if( MyUtils.getIntParamater(request, "i_cmt") != 0 ) {
 			BoardCmtVO param = new BoardCmtVO();
+			param.setI_cmt(MyUtils.getIntParamater(request, "i_cmt"));
 			param.setI_user(MyUtils.getLoginUser(request).getI_user());
-			param.setI_cmt(MyUtils.getIntParamater(request, "cmt_id"));
-			BoardCmtDAO.deleteCmt(param);
+			BoardCmtDAO.deleteCmt2(param);
 		}
 		
-		response.sendRedirect("Detail?id="+ MyUtils.getIntParamater(request, "id"));
+		response.sendRedirect("Detail?id="+MyUtils.getIntParamater(request, "id"));
 	}
 
 	// (등록/수정)
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		BoardCmtVO param = new BoardCmtVO();
+		param.setI_user(MyUtils.getLoginUser(request).getI_user());
+		param.setI_board(MyUtils.getIntParamater(request, "id"));
+		param.setCmt(request.getParameter("cmt"));
+		param.setI_cmt(MyUtils.getIntParamater(request, "i_cmt"));
 		switch (MyUtils.getIntParamater(request, "i_cmt")) {
 		case 0:// 등록
-			BoardCmtVO param = new BoardCmtVO();
-			param.setI_user(MyUtils.getLoginUser(request).getI_user());
-			param.setI_board(MyUtils.getIntParamater(request, "id"));
-			param.setCmt(request.getParameter("cmt"));
 			BoardCmtDAO.insertCmt(param);
 			break;
 		default:// 수정
+			BoardCmtDAO.updateCmt(param);
+			param.setI_cmt(0);
 			break;
 		}
-		doGet(request, response);
+		response.sendRedirect("Detail?id="+MyUtils.getIntParamater(request, "id"));
+		//doGet(request, response);
 	}
 
 }

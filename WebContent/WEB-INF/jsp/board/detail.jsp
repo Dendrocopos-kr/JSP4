@@ -271,8 +271,8 @@ div input {
 							<td class="info">
 								<c:if test="${item.is_del == 0}">
 									<c:if test="${ item.i_user == login_user.i_user }">
-										<button>수정</button>
-										<button onclick="cmtDel(${item.i_board},${item.i_cmt});">삭제</button>
+										<button onclick="regCmt(${item.i_cmt},'${item.cmt}')">수정</button>
+										<button onclick="cmtDel(${item.i_cmt});">삭제</button>
 									</c:if>
 								</c:if>
 							</td>
@@ -287,7 +287,11 @@ div input {
 			</table>
 			<div>
 				<form action="cmt" id="cmtFrm" method="post">
-					<input type="hidden" name="i_cmt" value="0"> <input type="hidden" name="id" value="${data.i_board}"> <input type="text" id="cmt_body" name="cmt" placeholder="댓글내용"> <input type="submit" value="댓글 달기">
+					<input type="hidden" name="i_cmt" value="0">
+					<input type="hidden" name="id" value="${data.i_board}">
+					<input type="text" id="cmt_body" name="cmt" placeholder="댓글내용">
+					<input type="submit" id="cmtSubmt" value="댓글 달기">
+					<input type="hidden" id="cmtCancelBtn" value="취소" onclick="cmtCancel();"> 
 				</form>
 			</div>
 		</div>
@@ -301,12 +305,25 @@ div input {
 			}
 		}
 		
-		function cmtDel(board,cmt) {
+		function cmtDel(cmt) {
 			event.preventDefault();
 			var result = confirm('댓글을 삭제하시겠습니까?');
 			if (result) {
-				location.href = 'cmt?id='+board+'&cmt_id='+cmt;
+				location.href = 'cmt?id=${data.i_board}&i_cmt='+cmt;
 			}
+		}
+		function cmtCancel(){
+			cmtFrm.i_cmt.value = 0;
+			cmtFrm.cmt_body.value = '';
+			cmtFrm.cmtSubmt.value = '댓글 달기';
+			cmtFrm.cmtCancelBtn.type = 'hidden';
+		}
+		function regCmt(cmtPK,cmt){
+			cmtFrm.i_cmt.value = cmtPK;
+			cmtFrm.cmt_body.value = cmt;
+			cmtFrm.cmtSubmt.value = '댓글 수정';
+			cmtFrm.cmtCancelBtn.type = 'button';
+			cmtFrm.cmt_body.focus();
 		}
 	</script>
 </body>

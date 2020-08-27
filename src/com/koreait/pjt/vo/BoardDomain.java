@@ -4,7 +4,14 @@ public class BoardDomain extends BoardVO{
 	private String user_nm;
 	private int like;
 	private int like_count;
+	private int recode_cnt;
 	
+	public int getRecode_cnt() {
+		return recode_cnt;
+	}
+	public void setRecode_cnt(int recode_cnt) {
+		this.recode_cnt = recode_cnt;
+	}
 	public int getLike_count() {
 		return like_count;
 	}

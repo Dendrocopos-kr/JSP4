@@ -11,6 +11,25 @@ import com.koreait.pjt.vo.BoardVO;
 import com.koreait.pjt.vo.UserVO;
 
 public class BoardDAO {	
+	public static int selectPagingCnt(BoardDomain param) {
+		String sql = " select ceil(count(i_board)/?) from t_board4 ";
+		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+			
+			@Override
+			public void prepard(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getRecode_cnt());
+			}
+			
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				if(rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+		});
+	}
+	
 	public static int deleteBoardLike(BoardVO param) {
 		String sql = " delete t_board4_like where i_user = ? and i_board = ? ";
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
@@ -118,9 +137,46 @@ public class BoardDAO {
 		});
 		return e;
 	}
+	public static List<BoardVO> selectBoardList_Page(int currentPage, int recode_count){
+		String sql = " SELECT  A.* FROM (SELECT ROWNUM as RNUM, A.* FROM ( SELECT a.i_board, a.title, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user ORDER BY i_board DESC )A " 
+				+ " where rownum <= ? )A WHERE a.RNUM > ? ";
+		List<BoardVO> list = new ArrayList();
+		
+		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+			
+			@Override
+			public void prepard(PreparedStatement ps) throws SQLException {
+				int endIndex = currentPage*recode_count;
+				ps.setInt(1, endIndex);
+				ps.setInt(2, endIndex-recode_count);				
+			}
+			
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				int total = 0;
+				while (rs.next()) {
+					BoardDomain e = new BoardDomain();
+
+					e.setI_board(rs.getInt("i_board"));
+					e.setTitle(rs.getNString("title"));
+					// e.setCtnt( rs.getNString("ctnt") );
+					e.setHits(rs.getInt("hits"));
+					e.setI_user(rs.getInt("i_user"));
+					e.setR_dt(rs.getNString("r_dt"));
+					// e.setM_dt( rs.getNString("m_dt") );
+
+					e.setUser_nm(rs.getNString("user_nm"));
+					list.add(e);
+					total++;
+				}
+				return total;
+			}
+		});
+		return list;
+	}
+	/*
 	public static List<BoardVO> selectBoardList() {
-		String sql = " SELECT a.i_board, a.title, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm "
-				+ " FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user ORDER BY i_board DESC";
+		String sql = " SELECT a.i_board, a.title, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user ORDER BY i_board DESC";
 		List<BoardVO> list = new ArrayList();
 
 		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
@@ -152,6 +208,7 @@ public class BoardDAO {
 		});
 		return list;
 	}
+	*/
 	public static int insertBoard(BoardVO e) {
 		String sql = " insert into t_board4 " + " (i_board, title, ctnt ,i_user ) " + "values"
 				+ " (seq_board4.nextval , ? , ? ,?) ";

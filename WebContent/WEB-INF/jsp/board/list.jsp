@@ -4,8 +4,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <title>게시판</title>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <style>
 * {
@@ -45,7 +44,7 @@ a button {
 	color: #58585a;
 	border-radius: 10px;
 	font-weight: bold;
-	font-size:1.5em;
+	font-size: 1.5em;
 }
 
 table {
@@ -79,7 +78,8 @@ td:nth-child(2) {
 }
 
 .container {
-	text-align: center; margin : 30px auto;
+	text-align: center;
+	margin: 30px auto;
 	width: 95%;
 	margin: 30px auto;
 }
@@ -92,17 +92,43 @@ td:nth-child(2) {
 	color: #ef9173;
 	font-weight: bold;
 }
-.write_div{
-text-align: right;
-margin: 20px;
+
+.write_div {
+	text-align: right;
+	margin: 20px;
 }
+
+.pageBtn {
+	padding: 3px 9px;
+	margin: 0 1px 0 2px;
+	color: black;
+	cursor: pointer;
+	text-decoration: none;
+	border: 1px solid rgba(0,0,0,0);
+}
+
+.pageBtn:hover {
+	color: blue;
+	font-weight:bold;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+.curpage{
+	padding: 3px 9px;
+	margin: 0 1px 0 2px;
+	text-decoration: none;
+	border: 1px solid rgba(0,0,0,0);
+	color : grey;
+}
+
 </style>
 <body>
 	<div class="container">
 		<div>
-			<h1><span class="material-icons">
-event_note
-</span>게시판 리스트</h1>
+			<h1>
+				<span class="material-icons"> event_note </span>게시판 리스트
+			</h1>
 		</div>
 		<div id="user_welcome">
 			✔【<span id="user-color">${login_user.user_nm}</span>】님 환영합니다. <a href="/Logout">
@@ -111,9 +137,9 @@ event_note
 		</div>
 		<div class="write_div">
 			<a href="Regmod">
-				<button id="write"><span class="material-icons">
-create
-</span>새글 쓰기</button>
+				<button id="write">
+					<span class="material-icons"> create </span>새글 쓰기
+				</button>
 			</a>
 		</div>
 		<table class="table">
@@ -125,14 +151,14 @@ create
 				<th style="width: 15%;">작성일</th>
 			</tr>
 			<c:if test="${!empty data}">
-				<c:forEach items="${data}" var="item">
-					<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
-						<td>${item.i_board }</td>
-						<td>${item.title }</td>
-						<td>${item.hits }</td>
-						<td>${item.user_nm }</td>
-						<td>${item.r_dt }</td>
-					</tr>
+				<c:forEach items="${data}" var="item" varStatus="status">
+						<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
+							<td>${item.i_board }</td>
+							<td>${item.title }</td>
+							<td>${item.hits }</td>
+							<td>${item.user_nm }</td>
+							<td>${item.r_dt }</td>
+						</tr>
 				</c:forEach>
 			</c:if>
 			<c:if test="${empty data}">
@@ -141,6 +167,16 @@ create
 				</tr>
 			</c:if>
 		</table>
+		<div>
+			<c:forEach var="cnt" begin="1" end="${paging}" step="1">
+				<c:if test="${currentPage != cnt}">
+					<a href="List?page=${cnt}" class="pageBtn">${cnt}</a>
+				</c:if>
+				<c:if test="${currentPage == cnt}">
+					<span class="curpage">${cnt}</span>
+				</c:if>
+			</c:forEach>
+		</div>
 	</div>
 	<script type="text/javascript">
 	function moveToDetail(PK) {
