@@ -19,19 +19,20 @@ public class BoardListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		//HttpSession hs = request.getSession();
-		//request.setAttribute("user", hs.getAttribute(Const.LOGIN_USER));
-		
-		int page = MyUtils.getIntParamater(request, "page") ;
-		page = page==0 ? 1 : page;
+			throws ServletException, IOException {		
 		BoardDomain param = new BoardDomain();
-		param.setRecode_cnt(Const.RECODE_CNT);
+		int recordCnt = MyUtils.getIntParamater(request, "record_cnt");
+		param.setRecode_cnt(recordCnt = ( recordCnt == 0 ? 10 : recordCnt));
+
+		int page = MyUtils.getIntParamater(request, "page") ;
+		page = page==0 ? 1 : page;		
+		
+		int maxRecode = page * recordCnt;
+		int minRecord = maxRecode - recordCnt;
 		
 		request.setAttribute("currentPage", page);
 		request.setAttribute("paging", BoardDAO.selectPagingCnt(param));
-		request.setAttribute("data", BoardDAO.selectBoardList_Page(page, Const.RECODE_CNT));
-		//request.setAttribute("data", BoardDAO.selectBoardList());
+		request.setAttribute("data", BoardDAO.selectBoardList_Page(minRecord,maxRecode));
 		ViewResolver.forwardLoginCheck("board/list", request, response);
 	}
 

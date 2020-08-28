@@ -207,7 +207,7 @@ div input {
 			 -->
 			<div>${temp }</div>
 			<div>
-				<a href="List">
+				<a href="List?page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}">
 					<button class="menu_btn">리스트보기</button>
 				</a>
 			</div>

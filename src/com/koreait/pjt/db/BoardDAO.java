@@ -137,7 +137,7 @@ public class BoardDAO {
 		});
 		return e;
 	}
-	public static List<BoardVO> selectBoardList_Page(int currentPage, int recode_count){
+	public static List<BoardVO> selectBoardList_Page(int minRecord, int maxRecord){
 		String sql = " SELECT  A.* FROM (SELECT ROWNUM as RNUM, A.* FROM ( SELECT a.i_board, a.title, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user ORDER BY i_board DESC )A " 
 				+ " where rownum <= ? )A WHERE a.RNUM > ? ";
 		List<BoardVO> list = new ArrayList();
@@ -146,9 +146,8 @@ public class BoardDAO {
 			
 			@Override
 			public void prepard(PreparedStatement ps) throws SQLException {
-				int endIndex = currentPage*recode_count;
-				ps.setInt(1, endIndex);
-				ps.setInt(2, endIndex-recode_count);				
+				ps.setInt(1, maxRecord);				
+				ps.setInt(2, minRecord);
 			}
 			
 			@Override

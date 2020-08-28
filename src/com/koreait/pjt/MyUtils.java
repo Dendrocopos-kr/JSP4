@@ -58,7 +58,7 @@ public class MyUtils {
 		try {
 			return Integer.parseInt(str);
 		} catch (Exception e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			System.out.println("null 이거나 숫자가 아닙니다.");
 			return defualt_num;
 		}
@@ -67,5 +67,15 @@ public class MyUtils {
 	public static void setLoginUser(HttpServletRequest request, UserVO e) {
 		HttpSession hs = request.getSession();
 		hs.setAttribute(Const.LOGIN_USER, e);
+	}
+
+	public static void setSesstionItem(String Attribute_name, HttpServletRequest request, Object e) {
+		HttpSession hs = request.getSession();
+		hs.setAttribute(Attribute_name, e);
+	}
+
+	public static Object getSessionItem(String Attribute_name, HttpServletRequest request) {
+		HttpSession hs = request.getSession();
+		return hs.getAttribute(Attribute_name);
 	}
 }

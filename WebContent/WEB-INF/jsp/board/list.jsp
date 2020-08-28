@@ -104,24 +104,26 @@ td:nth-child(2) {
 	color: black;
 	cursor: pointer;
 	text-decoration: none;
-	border: 1px solid rgba(0,0,0,0);
+	border: 1px solid rgba(0, 0, 0, 0);
 }
 
 .pageBtn:hover {
 	color: blue;
-	font-weight:bold;
+	font-weight: bold;
 	border: 1px solid black;
 	border-radius: 5px;
 }
 
-.curpage{
+.curpage {
 	padding: 3px 9px;
 	margin: 0 1px 0 2px;
 	text-decoration: none;
-	border: 1px solid rgba(0,0,0,0);
-	color : grey;
+	border: 1px solid rgba(0, 0, 0, 0);
+	color: grey;
 }
-
+#selFrm{
+text-align: right;
+}
 </style>
 <body>
 	<div class="container">
@@ -142,6 +144,24 @@ td:nth-child(2) {
 				</button>
 			</a>
 		</div>
+		<div>
+			<form id="selFrm" action="List" method="get">
+				<input type="hidden" name="page" value="${param.page == null ? 1 : param.page }">
+				<span>페이지당 표시할 글 수</span>
+				<select name="record_cnt" onchange="changerecordCnt()">
+					<c:forEach begin="10" end="50" step="10" var="item">
+						<c:choose>
+							<c:when test="${param.record_cnt == item}">
+								<option value="${item}" selected="selected">${item}개</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${item }">${item}개</option>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+				</select>
+			</form>
+		</div>
 		<table class="table">
 			<tr>
 				<th style="width: 10%;">번호</th>
@@ -152,13 +172,13 @@ td:nth-child(2) {
 			</tr>
 			<c:if test="${!empty data}">
 				<c:forEach items="${data}" var="item" varStatus="status">
-						<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
-							<td>${item.i_board }</td>
-							<td>${item.title }</td>
-							<td>${item.hits }</td>
-							<td>${item.user_nm }</td>
-							<td>${item.r_dt }</td>
-						</tr>
+					<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
+						<td>${item.i_board }</td>
+						<td>${item.title }</td>
+						<td>${item.hits }</td>
+						<td>${item.user_nm }</td>
+						<td>${item.r_dt }</td>
+					</tr>
 				</c:forEach>
 			</c:if>
 			<c:if test="${empty data}">
@@ -170,7 +190,7 @@ td:nth-child(2) {
 		<div>
 			<c:forEach var="cnt" begin="1" end="${paging}" step="1">
 				<c:if test="${currentPage != cnt}">
-					<a href="List?page=${cnt}" class="pageBtn">${cnt}</a>
+					<a href="List?page=${cnt}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}" class="pageBtn">${cnt}</a>
 				</c:if>
 				<c:if test="${currentPage == cnt}">
 					<span class="curpage">${cnt}</span>
@@ -181,7 +201,10 @@ td:nth-child(2) {
 	<script type="text/javascript">
 	function moveToDetail(PK) {
 		console.log(PK);
-		location.href = 'Detail?id='+PK;
+		location.href = 'Detail?id='+PK+'&page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}';
+	}
+	function changerecordCnt(){
+		selFrm.submit();
 	}
 	</script>
 </body>
