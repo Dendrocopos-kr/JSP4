@@ -17,7 +17,15 @@ public class BoardLikeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("Detail?id="+ MyUtils.getIntParamater(request, "id"));
+		String src = String.format("Detail?id=%s"
+				+ "&page=%d"
+				+ "&record_cnt=%d"
+				+ "&searchText=%s",
+				MyUtils.getIntParamater(request, "id"),
+				MyUtils.getIntParamater(request, "page"),
+				MyUtils.getIntParamater(request, "record_cnt"),
+				request.getParameter("searchText"));
+		response.sendRedirect(src);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getParameter("like") != null) {

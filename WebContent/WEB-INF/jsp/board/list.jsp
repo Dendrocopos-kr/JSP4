@@ -49,8 +49,8 @@ a button {
 
 table {
 	border: black 1px solid;
-	margin: 10px auto;
 	border-collapse: collapse;
+	margin: 20px;
 }
 
 th, td {
@@ -81,7 +81,6 @@ td:nth-child(2) {
 	text-align: center;
 	margin: 30px auto;
 	width: 95%;
-	margin: 30px auto;
 }
 
 .container h1 {
@@ -91,11 +90,6 @@ td:nth-child(2) {
 #usr-color {
 	color: #ef9173;
 	font-weight: bold;
-}
-
-.write_div {
-	text-align: right;
-	margin: 20px;
 }
 
 .pageBtn {
@@ -121,8 +115,21 @@ td:nth-child(2) {
 	border: 1px solid rgba(0, 0, 0, 0);
 	color: grey;
 }
-#selFrm{
-text-align: right;
+
+.btn {
+	background-color: #f5d1ca;
+	text-align: center;
+	padding: 5px;
+	color: #58585a;
+	border: none;
+	border-radius: 10px;
+	font-weight: bold;
+	font-size: 1.2em;
+	width: 100px;
+}
+
+#selFrm {
+	text-align: right;
 }
 </style>
 <body>
@@ -133,21 +140,24 @@ text-align: right;
 			</h1>
 		</div>
 		<div id="user_welcome">
-			✔【<span id="user-color">${login_user.user_nm}</span>】님 환영합니다. <a href="/Logout">
+			✔【<span id="user-color">${login_user.user_nm}</span>】님 환영합니다. 
+			<a href="/Profile">프로필</a>			
+			<a href="/Logout">
 				<button id="logout">로그아웃</button>
 			</a>
 		</div>
-		<div class="write_div">
+		<div style="text-align: right; margin: 20px;">
 			<a href="Regmod">
 				<button id="write">
 					<span class="material-icons"> create </span>새글 쓰기
 				</button>
 			</a>
+
 		</div>
 		<div>
-			<form id="selFrm" action="List" method="get">
-				<input type="hidden" name="page" value="${param.page == null ? 1 : param.page }">
-				<span>페이지당 표시할 글 수</span>
+			<form id="selFrm" action="List" method="get" style="margin: 20px;">
+				<input type="hidden" name="page" value="${param.page == null ? 1 : param.page }"> <span>페이지당 표시할 글 수</span> 
+				<input type="hidden" name="searchText" value="${param.searchText}">
 				<select name="record_cnt" onchange="changerecordCnt()">
 					<c:forEach begin="10" end="50" step="10" var="item">
 						<c:choose>
@@ -176,7 +186,15 @@ text-align: right;
 						<td>${item.i_board }</td>
 						<td>${item.title }</td>
 						<td>${item.hits }</td>
-						<td>${item.user_nm }</td>
+						<td>
+							<c:if test="${item.user_profile_img==null}">
+								<span class="material-icons" style="border-radius: 50%; vertical-align: middle; font-size: 3em;"> account_circle </span>
+							</c:if>
+							<c:if test="${item.user_profile_img!=null}">
+								<img class="material-icons" src="${item.user_profile_img}" width="48px;" height="48px;" style="border-radius: 50%; vertical-align: middle;">
+							</c:if>
+							<span>${item.user_nm }</span>
+						</td>
 						<td>${item.r_dt }</td>
 					</tr>
 				</c:forEach>
@@ -187,10 +205,17 @@ text-align: right;
 				</tr>
 			</c:if>
 		</table>
-		<div>
+
+		<div style="margin: 20px;">
+			<form action="/Board/List">
+				<span>검색어 입력: <input name="searchText" value="${param.searchText}"></span>
+				<button type="submit" class="btn">검색</button>
+			</form>
+		</div>
+		<div style="margin: 20px;">
 			<c:forEach var="cnt" begin="1" end="${paging}" step="1">
 				<c:if test="${currentPage != cnt}">
-					<a href="List?page=${cnt}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}" class="pageBtn">${cnt}</a>
+					<a href="List?page=${cnt}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}" class="pageBtn">${cnt}</a>
 				</c:if>
 				<c:if test="${currentPage == cnt}">
 					<span class="curpage">${cnt}</span>
@@ -201,7 +226,7 @@ text-align: right;
 	<script type="text/javascript">
 	function moveToDetail(PK) {
 		console.log(PK);
-		location.href = 'Detail?id='+PK+'&page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}';
+		location.href = 'Detail?id='+PK+'&page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}';
 	}
 	function changerecordCnt(){
 		selFrm.submit();

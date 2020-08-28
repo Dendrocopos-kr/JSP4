@@ -5,7 +5,28 @@ public class BoardDomain extends BoardVO{
 	private int like;
 	private int like_count;
 	private int recode_cnt;
+	private String searchText;
+	private int maxRecord;
+	private int minRecord;
 	
+	public int getMaxRecord() {
+		return maxRecord;
+	}
+	public void setMaxRecord(int maxRecord) {
+		this.maxRecord = maxRecord;
+	}
+	public int getMinRecord() {
+		return minRecord;
+	}
+	public void setMinRecord(int minRecord) {
+		this.minRecord = minRecord;
+	}
+	public String getSearchText() {
+		return searchText;
+	}
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
 	public int getRecode_cnt() {
 		return recode_cnt;
 	}

@@ -24,15 +24,16 @@ public class BoardListServlet extends HttpServlet {
 		int recordCnt = MyUtils.getIntParamater(request, "record_cnt");
 		param.setRecode_cnt(recordCnt = ( recordCnt == 0 ? 10 : recordCnt));
 
+		param.setSearchText(request.getParameter("searchText") == null ? '%'+""+'%' : '%'+request.getParameter("searchText")+'%');
 		int page = MyUtils.getIntParamater(request, "page") ;
 		page = page==0 ? 1 : page;		
 		
-		int maxRecode = page * recordCnt;
-		int minRecord = maxRecode - recordCnt;
+		param.setMaxRecord(page * recordCnt);
+		param.setMinRecord(param.getMaxRecord() - recordCnt);
 		
 		request.setAttribute("currentPage", page);
 		request.setAttribute("paging", BoardDAO.selectPagingCnt(param));
-		request.setAttribute("data", BoardDAO.selectBoardList_Page(minRecord,maxRecode));
+		request.setAttribute("data", BoardDAO.selectBoardList_Page(param));
 		ViewResolver.forwardLoginCheck("board/list", request, response);
 	}
 

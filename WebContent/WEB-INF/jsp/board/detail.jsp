@@ -207,7 +207,7 @@ div input {
 			 -->
 			<div>${temp }</div>
 			<div>
-				<a href="List?page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}">
+				<a href="List?page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}">
 					<button class="menu_btn">리스트보기</button>
 				</a>
 			</div>
@@ -234,7 +234,13 @@ div input {
 					<!-- 내/외부 처리용 action -->
 					<!-- <form action="" id="like" method="post"> -->
 					<form action="Like" id="like" method="post">
-						<input type="hidden" name="like" value="0"><input type="hidden" name="id" value="${data.i_board}"><a href="?id=${data.i_board}&like=0"><button class="like">
+						<input type="hidden" name="like" value="0">
+						<input type="hidden" name="id" value="${data.i_board}">
+						<input type="hidden" name="searchText" value="${param.searchText}">
+						<input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}">
+						<input type="hidden" name="page" value="${param.page == null ? 1 : param.page}">
+						<a href="?id=${data.i_board}&like=0">
+						<button class="like">
 								<span class="material-icons"> favorite</span><sup> ${data.like_count } </sup>
 							</button></a>
 					</form>
@@ -242,7 +248,13 @@ div input {
 				<c:if test="${data.like == 0}">
 					<!--<form action="" id="like" method="post"> -->
 					<form action="Like" id="like" method="post">
-						<input type="hidden" name="like" value="1"><input type="hidden" name="id" value="${data.i_board}"><a href="?id=${data.i_board}&like=1"><button class="like">
+						<input type="hidden" name="like" value="1">
+						<input type="hidden" name="id" value="${data.i_board}">
+						<input type="hidden" name="searchText" value="${param.searchText}">
+						<input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}">
+						<input type="hidden" name="page" value="${param.page == null ? 1 : param.page}">
+						<a href="?id=${data.i_board}&like=1">
+						<button class="like">
 								<span class="material-icons"> favorite_border</span><sup> ${data.like_count } </sup>
 							</button></a>
 					</form>

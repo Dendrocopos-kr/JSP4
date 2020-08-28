@@ -8,16 +8,16 @@ import java.util.List;
 
 import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
-import com.koreait.pjt.vo.UserVO;
 
 public class BoardDAO {	
 	public static int selectPagingCnt(BoardDomain param) {
-		String sql = " select ceil(count(i_board)/?) from t_board4 ";
+		String sql = " select ceil(count(i_board)/?) from t_board4 where title like ? ";
 		return JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 			
 			@Override
 			public void prepard(PreparedStatement ps) throws SQLException {
 				ps.setInt(1, param.getRecode_cnt());
+				ps.setNString(2, param.getSearchText());
 			}
 			
 			@Override
@@ -137,8 +137,8 @@ public class BoardDAO {
 		});
 		return e;
 	}
-	public static List<BoardVO> selectBoardList_Page(int minRecord, int maxRecord){
-		String sql = " SELECT  A.* FROM (SELECT ROWNUM as RNUM, A.* FROM ( SELECT a.i_board, a.title, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user ORDER BY i_board DESC )A " 
+	public static List<BoardVO> selectBoardList_Page(BoardDomain param){
+		String sql = " SELECT  A.* FROM (SELECT ROWNUM as RNUM, A.* FROM ( SELECT a.i_board, a.title, a.hits,b.uprofile_img, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user where a.title like ? ORDER BY i_board DESC )A " 
 				+ " where rownum <= ? )A WHERE a.RNUM > ? ";
 		List<BoardVO> list = new ArrayList();
 		
@@ -146,8 +146,9 @@ public class BoardDAO {
 			
 			@Override
 			public void prepard(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, maxRecord);				
-				ps.setInt(2, minRecord);
+				ps.setNString(1, param.getSearchText());
+				ps.setInt(2, param.getMaxRecord());				
+				ps.setInt(3, param.getMinRecord());
 			}
 			
 			@Override
@@ -163,7 +164,7 @@ public class BoardDAO {
 					e.setI_user(rs.getInt("i_user"));
 					e.setR_dt(rs.getNString("r_dt"));
 					// e.setM_dt( rs.getNString("m_dt") );
-
+					e.setUser_profile_img(rs.getNString("uprofile_img"));
 					e.setUser_nm(rs.getNString("user_nm"));
 					list.add(e);
 					total++;
