@@ -141,9 +141,11 @@ td:nth-child(2) {
 		</div>
 		<div id="user_welcome">
 			✔【<span id="user-color">${login_user.user_nm}</span>】님 환영합니다. 
-			<a href="/Profile">프로필</a>			
+		</div>
+		<div  style="text-align: right; margin: 20px;">
+		<a href="/Profile"><button class="btn">프로필</button></a>			
 			<a href="/Logout">
-				<button id="logout">로그아웃</button>
+				<button class="btn">로그아웃</button>
 			</a>
 		</div>
 		<div style="text-align: right; margin: 20px;">
