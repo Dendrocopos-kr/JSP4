@@ -193,7 +193,7 @@ td:nth-child(2) {
 								<span class="material-icons" style="border-radius: 50%; vertical-align: middle; font-size: 3em;"> account_circle </span>
 							</c:if>
 							<c:if test="${item.user_profile_img!=null}">
-								<img class="material-icons" src="${item.user_profile_img}" width="48px;" height="48px;" style="border-radius: 50%; vertical-align: middle;">
+								<img src="/img/user/${item.i_user}/${item.user_profile_img}" width="48px;" height="48px;" style="border-radius: 50%; vertical-align: middle;">
 							</c:if>
 							<span>${item.user_nm }</span>
 						</td>

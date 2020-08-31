@@ -72,7 +72,42 @@ public class UserDAO {
 			}
 		});
 	}
-	
+	public static int updateUserProfile(UserVO e) {
+		StringBuilder sb = new StringBuilder(" update  t_user  set m_dt = sysdate");		
+		if( e.getUser_pw() != null ) {
+			sb.append(" , USER_PW = '");
+			sb.append(e.getUser_pw());
+			sb.append("' ");
+		}
+		
+		if( e.getUser_nm() != null ) {
+			sb.append(" , USER_NM = '");
+			sb.append(e.getUser_nm());
+			sb.append("' ");
+		}
+
+		if( e.getUser_email() != null ) {
+			sb.append(" , MAIL = '");
+			sb.append(e.getUser_email());
+			sb.append("' ");
+		}
+		
+		if( e.getProfile_img() != null ) {
+			sb.append(" , UPROFILE_IMG = '");
+			sb.append(e.getProfile_img());
+			sb.append("' ");
+		}
+		sb.append(" where i_user = ? ");
+		
+		return JdbcTemplate.executeUpdate(sb.toString(), new JdbcUpdateInterface() {
+			
+			@Override
+			public int update(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, e.getI_user());
+				return ps.executeUpdate();
+			}
+		});
+	}
 	public static UserVO selectUser(int i_user) {
 		String sql = " select user_nm, uprofile_img, user_id, mail, r_dt "
 				+ " From t_user where i_user = ? ";
