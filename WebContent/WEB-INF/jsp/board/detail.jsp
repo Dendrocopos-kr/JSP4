@@ -71,6 +71,8 @@
 	margin: 10px;
 	text-align: center;
 	border-collapse: collapse;
+	vertical-align: middle;
+	background: lightgrey;
 	/* width: 100%; */
 }
 
@@ -101,7 +103,7 @@
 	border: 1px black solid;
 }
 
-.board_ctnt_title, .profile, .board_profile {
+.board_ctnt_title, .board_profile {
 	justify-content: space-between;
 	background: #EACACB;
 	display: flex;
@@ -109,6 +111,16 @@
 	border-radius: 10px;
 	padding: 10px;
 	margin: 10px;
+}
+
+.profile {
+	justify-content: space-between;
+	background: #EACACB;
+	margin-bottom: 30px;
+	border-radius: 10px;
+	padding: 10px;
+	margin: 10px;
+	display: inline-block;
 }
 
 .menu_info {
@@ -192,6 +204,19 @@ div input {
 #cmt_submit {
 	box-shadow: 0px 1px 1px black;
 }
+
+.profile_img {
+	border-radius: 50%;
+	vertical-align: middle;
+	font-size: 3em;
+	overflow: hidden;
+}
+
+.profile_img img {
+	width: 1em;
+	height: 1em;
+    padding: 10px;
+}
 </style>
 <body>
 	<div class="main_body">
@@ -234,29 +259,21 @@ div input {
 					<!-- 내/외부 처리용 action -->
 					<!-- <form action="" id="like" method="post"> -->
 					<form action="Like" id="like" method="post">
-						<input type="hidden" name="like" value="0">
-						<input type="hidden" name="id" value="${data.i_board}">
-						<input type="hidden" name="searchText" value="${param.searchText}">
-						<input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}">
-						<input type="hidden" name="page" value="${param.page == null ? 1 : param.page}">
-						<a href="?id=${data.i_board}&like=0">
-						<button class="like">
+						<input type="hidden" name="like" value="0"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=0">
+							<button class="like">
 								<span class="material-icons"> favorite</span><sup> ${data.like_count } </sup>
-							</button></a>
+							</button>
+						</a>
 					</form>
 				</c:if>
 				<c:if test="${data.like == 0}">
 					<!--<form action="" id="like" method="post"> -->
 					<form action="Like" id="like" method="post">
-						<input type="hidden" name="like" value="1">
-						<input type="hidden" name="id" value="${data.i_board}">
-						<input type="hidden" name="searchText" value="${param.searchText}">
-						<input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}">
-						<input type="hidden" name="page" value="${param.page == null ? 1 : param.page}">
-						<a href="?id=${data.i_board}&like=1">
-						<button class="like">
+						<input type="hidden" name="like" value="1"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=1">
+							<button class="like">
 								<span class="material-icons"> favorite_border</span><sup> ${data.like_count } </sup>
-							</button></a>
+							</button>
+						</a>
 					</form>
 				</c:if>
 				<div>조회수 : ${data.hits}</div>
@@ -264,14 +281,34 @@ div input {
 			<div class="ctnt">
 				<textarea rows="50" readonly="readonly">${data.ctnt}</textarea>
 			</div>
-			<div class="profile">
-				<div>작성자 : ${data.user_nm}</div>
-			</div>
+			<table class="profile">
+				<tr>
+					<td class="profile_img">
+						<c:if test="${data.user_profile_img==null}">
+							<img src="/img/default_profile.png">
+						</c:if>
+						<c:if test="${data.user_profile_img!=null}">
+							<img src="/img/user/${data.i_user}/${data.user_profile_img}">
+						</c:if>
+					</td>
+					<td>작성자 : ${data.user_nm}</td>
+				</tr>
+			</table>
 			<table class="cmt">
 				<c:if test="${!empty cmtData}">
 					<c:forEach items="${cmtData}" var="item">
 						<tr>
 							<c:if test="${item.is_del == 0}">
+								<td >
+									<div class="profile_img">
+										<c:if test="${data.user_profile_img==null}">
+											<img src="/img/default_profile.png">
+										</c:if>
+										<c:if test="${data.user_profile_img!=null}">
+											<img src="/img/user/${data.i_user}/${data.user_profile_img}">
+										</c:if>
+									</div>
+								</td>
 								<td class="cmt_name">${item.user_nm}</td>
 								<td class="cmt_body">${item.cmt}</td>
 							</c:if>
@@ -299,11 +336,7 @@ div input {
 			</table>
 			<div>
 				<form action="cmt" id="cmtFrm" method="post">
-					<input type="hidden" name="i_cmt" value="0">
-					<input type="hidden" name="id" value="${data.i_board}">
-					<input type="text" id="cmt_body" name="cmt" placeholder="댓글내용">
-					<input type="submit" id="cmtSubmt" value="댓글 달기">
-					<input type="hidden" id="cmtCancelBtn" value="취소" onclick="cmtCancel();"> 
+					<input type="hidden" name="i_cmt" value="0"> <input type="hidden" name="id" value="${data.i_board}"> <input type="text" id="cmt_body" name="cmt" placeholder="댓글내용"> <input type="submit" id="cmtSubmt" value="댓글 달기"> <input type="hidden" id="cmtCancelBtn" value="취소" onclick="cmtCancel();">
 				</form>
 			</div>
 		</div>

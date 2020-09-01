@@ -9,14 +9,7 @@ public class BoardVO {
 	private String r_dt;
 	private String m_dt;
 	private int is_del;
-	private String user_profile_img;
-
-	public String getUser_profile_img() {
-		return user_profile_img;
-	}
-	public void setUser_profile_img(String user_profile_img) {
-		this.user_profile_img = user_profile_img;
-	}
+	
 	public int getIs_del() {
 		return is_del;
 	}

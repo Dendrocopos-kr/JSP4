@@ -43,12 +43,12 @@ public class BoardDAO {
 		});
 	}
 	public static int insertBoardLike(BoardVO param) {
-		String sql = " INSERT INTO t_board4_like (" + 
-				"    i_user," + 
-				"    i_board" + 
-				") VALUES (" + 
-				"    ?," + 
-				"    ?" + 
+		String sql = " INSERT INTO t_board4_like ( " + 
+				"    i_user, " + 
+				"    i_board " + 
+				") VALUES ( " + 
+				"    ?, " + 
+				"    ? " + 
 				") ";
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
 			
@@ -100,7 +100,7 @@ public class BoardDAO {
 	*/
 	public static BoardDomain selectBoard(BoardVO param) {
 		BoardDomain e = new BoardDomain();
-		String sql = " select a.i_board, a.title, a.ctnt, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt,C.user_nm,decode(b.i_user, NULL, 0, 1) AS yn_like,"
+		String sql = " select a.i_board, a.title, a.ctnt,c.uprofile_img, a.hits, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt,C.user_nm,decode(b.i_user, NULL, 0, 1) AS yn_like,"
 				+ " (select count(*) blc from t_board4_like GROUP by i_board having i_board =?) as like_count "
 				+ " from"
 				+ " t_board4       a "
@@ -130,6 +130,7 @@ public class BoardDAO {
 					e.setUser_nm(rs.getNString("user_nm"));
 					e.setLike(rs.getInt("yn_like"));
 					e.setLike_count(rs.getInt("like_count"));
+					e.setUser_profile_img(rs.getNString("uprofile_img"));
 					return 1;
 				}
 				return 0;
@@ -138,17 +139,34 @@ public class BoardDAO {
 		return e;
 	}
 	public static List<BoardVO> selectBoardList_Page(BoardDomain param){
-		String sql = " SELECT  A.* FROM (SELECT ROWNUM as RNUM, A.* FROM ( SELECT a.i_board, a.title, a.hits,b.uprofile_img, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user where a.title like ? ORDER BY i_board DESC )A " 
-				+ " where rownum <= ? )A WHERE a.RNUM > ? ";
+//		String sql = " SELECT  A.* FROM (SELECT ROWNUM as RNUM, A.* FROM ( SELECT a.i_board, a.title, a.hits,b.uprofile_img, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user where a.title like ? ORDER BY i_board DESC )A " 
+//				+ " where rownum <= ? )A WHERE a.RNUM > ? ";
+//		
+		String sql = " SELECT a.* FROM ( "
+				+ " SELECT ROWNUM AS rnum, a.* FROM ( "
+				+ " SELECT a.i_board, a.title, a.hits, b.uprofile_img, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI')AS r_dt, b.user_nm, nvl(c.cnt_like, 0) AS cnt_like, nvl(d.cnt_cmt, 0) AS cnt_cmt, decode(e.i_board, NULL, 0, 1) AS my_like FROM  t_board4 a "
+				+ " JOIN t_user b ON a.i_user = b.i_user "
+				+ " LEFT JOIN ( "
+				+ " SELECT i_board, COUNT(i_board) AS cnt_like FROM t_board4_like GROUP BY i_board "
+				+ " ) c ON a.i_board = c.i_board "
+				+ " LEFT JOIN ( "
+				+ " SELECT i_board, COUNT(i_board) AS cnt_cmt FROM t_board4_cmt GROUP BY i_board "
+				+ " ) d ON d.i_board = a.i_board "
+				+ " LEFT JOIN ( "
+				+ " SELECT i_board FROM t_board4_like WHERE i_user = ? "
+				+ " ) e ON a.i_board = e.i_board WHERE a.title LIKE ? ORDER BY i_board DESC "
+				+ " ) a WHERE ROWNUM <= ? "
+				+ " ) a WHERE  a.rnum > ? ";
 		List<BoardVO> list = new ArrayList();
 		
 		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
 			
 			@Override
 			public void prepard(PreparedStatement ps) throws SQLException {
-				ps.setNString(1, param.getSearchText());
-				ps.setInt(2, param.getMaxRecord());				
-				ps.setInt(3, param.getMinRecord());
+				ps.setInt(1, param.getI_user());				
+				ps.setNString(2, param.getSearchText());
+				ps.setInt(3, param.getMaxRecord());				
+				ps.setInt(4, param.getMinRecord());
 			}
 			
 			@Override
@@ -166,6 +184,9 @@ public class BoardDAO {
 					// e.setM_dt( rs.getNString("m_dt") );
 					e.setUser_profile_img(rs.getNString("uprofile_img"));
 					e.setUser_nm(rs.getNString("user_nm"));
+					e.setMy_like(rs.getInt("my_like"));
+					e.setBoard_like_cnt(rs.getInt("cnt_like"));
+					e.setBoard_cmt_cnt(rs.getInt("cnt_cmt"));
 					list.add(e);
 					total++;
 				}
@@ -210,7 +231,7 @@ public class BoardDAO {
 	}
 	*/
 	public static int insertBoard(BoardVO e) {
-		String sql = " insert into t_board4 " + " (i_board, title, ctnt ,i_user ) " + "values"
+		String sql = " insert into t_board4  " + " (i_board, title, ctnt ,i_user )  " + "values"
 				+ " (seq_board4.nextval , ? , ? ,?) ";
 		// System.out.println("insertBoard");
 
@@ -245,7 +266,7 @@ public class BoardDAO {
 		});
 	}
 	public static int updateBoard(BoardVO e) {
-		String sql = " update  t_board4  set  title = ?, ctnt = ?" + "where" + " i_board = ? and i_user = ? ";
+		String sql = " update  t_board4  set  title = ?, ctnt = ? " + "where " + " i_board = ? and i_user = ? ";
 		// System.out.println("updateBoard");
 		return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
 

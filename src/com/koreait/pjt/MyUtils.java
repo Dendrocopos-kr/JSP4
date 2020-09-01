@@ -8,8 +8,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.koreait.pjt.vo.UserVO;
+import com.sun.openpisces.TransformingPathConsumer2D.FilterSet;
 
 public class MyUtils {
+	
+	public static String scriptFilter(String ctnt) {
+		String[] filters = {"<script>","</script>"};
+		String[] filterReplaces = {"&lt;script&gt;","&lt;/script&gt;"};
+		
+		String result = ctnt;
+		for( int i = 0; i < filters.length; i++) {
+			result = result.replace(filters[i], filterReplaces[i]);
+		}
+		return result;
+	}
+	
 	public static int getIntParamater(HttpServletRequest request, String KeyName) {
 		return parseStringToInt(request.getParameter(KeyName));
 	}
@@ -59,7 +72,7 @@ public class MyUtils {
 			return Integer.parseInt(str);
 		} catch (Exception e) {
 			// e.printStackTrace();
-			System.out.println("null 이거나 숫자가 아닙니다.");
+			//System.out.println("null 이거나 숫자가 아닙니다.");
 			return defualt_num;
 		}
 	}

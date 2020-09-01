@@ -8,7 +8,36 @@ public class BoardDomain extends BoardVO{
 	private String searchText;
 	private int maxRecord;
 	private int minRecord;
+	private String user_profile_img;
+	private int my_like;
+	private int board_like_cnt;
+	private int board_cmt_cnt;
+
+	public String getUser_profile_img() {
+		return user_profile_img;
+	}
+	public void setUser_profile_img(String user_profile_img) {
+		this.user_profile_img = user_profile_img;
+	}
 	
+	public int getMy_like() {
+		return my_like;
+	}
+	public void setMy_like(int my_like) {
+		this.my_like = my_like;
+	}
+	public int getBoard_like_cnt() {
+		return board_like_cnt;
+	}
+	public void setBoard_like_cnt(int board_like_cnt) {
+		this.board_like_cnt = board_like_cnt;
+	}
+	public int getBoard_cmt_cnt() {
+		return board_cmt_cnt;
+	}
+	public void setBoard_cmt_cnt(int board_cmt_cnt) {
+		this.board_cmt_cnt = board_cmt_cnt;
+	}
 	public int getMaxRecord() {
 		return maxRecord;
 	}

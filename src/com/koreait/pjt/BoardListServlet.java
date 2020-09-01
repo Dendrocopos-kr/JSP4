@@ -23,7 +23,7 @@ public class BoardListServlet extends HttpServlet {
 		BoardDomain param = new BoardDomain();
 		int recordCnt = MyUtils.getIntParamater(request, "record_cnt");
 		param.setRecode_cnt(recordCnt = ( recordCnt == 0 ? 10 : recordCnt));
-
+		param.setI_user(MyUtils.getLoginUser(request).getI_user());
 		param.setSearchText(request.getParameter("searchText") == null ? '%'+""+'%' : '%'+request.getParameter("searchText")+'%');
 		int page = MyUtils.getIntParamater(request, "page") ;
 		page = page==0 ? 1 : page;		

@@ -33,7 +33,7 @@ public class BoardRegmodServlet extends HttpServlet {
 		// System.out.println("post : " + request.getParameter("id"));
 		BoardVO e = new BoardVO();
 		e.setTitle(request.getParameter("title"));
-		e.setCtnt(request.getParameter("ctnt"));
+		e.setCtnt(MyUtils.scriptFilter(request.getParameter("ctnt")));
 		e.setI_user(MyUtils.getLoginUser(request).getI_user());
 
 		if ( MyUtils.getIntParamater(request, "id") != 0) {

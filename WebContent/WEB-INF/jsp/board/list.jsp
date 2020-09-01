@@ -50,7 +50,7 @@ a button {
 table {
 	border: black 1px solid;
 	border-collapse: collapse;
-	margin: 20px;
+	margin: 20px auto;
 }
 
 th, td {
@@ -131,6 +131,21 @@ td:nth-child(2) {
 #selFrm {
 	text-align: right;
 }
+
+.profile {
+	border-radius: 50%;
+	vertical-align: middle;
+	font-size: 3em;
+	overflow: hidden;
+}
+
+.profile img {
+	width: 1em;
+	height: 1em;
+} 
+.like_color{
+	color:red;
+}
 </style>
 <body>
 	<div class="container">
@@ -140,11 +155,10 @@ td:nth-child(2) {
 			</h1>
 		</div>
 		<div id="user_welcome">
-			✔【<span id="user-color">${login_user.user_nm}</span>】님 환영합니다. 
+			✔【<span id="user-color">${login_user.user_nm}</span>】님 환영합니다.
 		</div>
-		<div  style="text-align: right; margin: 20px;">
-		<a href="/Profile"><button class="btn">프로필</button></a>			
-			<a href="/Logout">
+		<div style="text-align: right; margin: 20px;">
+			<a href="/Profile"><button class="btn">프로필</button></a> <a href="/Logout">
 				<button class="btn">로그아웃</button>
 			</a>
 		</div>
@@ -158,8 +172,7 @@ td:nth-child(2) {
 		</div>
 		<div>
 			<form id="selFrm" action="List" method="get" style="margin: 20px;">
-				<input type="hidden" name="page" value="${param.page == null ? 1 : param.page }"> <span>페이지당 표시할 글 수</span> 
-				<input type="hidden" name="searchText" value="${param.searchText}">
+				<input type="hidden" name="page" value="${param.page == null ? 1 : param.page }"> <span>페이지당 표시할 글 수</span> <input type="hidden" name="searchText" value="${param.searchText}">
 				<select name="record_cnt" onchange="changerecordCnt()">
 					<c:forEach begin="10" end="50" step="10" var="item">
 						<c:choose>
@@ -176,9 +189,11 @@ td:nth-child(2) {
 		</div>
 		<table class="table">
 			<tr>
-				<th style="width: 10%;">번호</th>
-				<th style="width: 50%;">제목</th>
-				<th style="width: 15%;">조회수</th>
+				<th>번호</th>
+				<th>제목</th>
+				<th>조회수</th>
+				<th>좋아요</th>
+				<th></th>
 				<th style="width: 15%;">작성자</th>
 				<th style="width: 15%;">작성일</th>
 			</tr>
@@ -186,15 +201,29 @@ td:nth-child(2) {
 				<c:forEach items="${data}" var="item" varStatus="status">
 					<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
 						<td>${item.i_board }</td>
-						<td>${item.title }</td>
+						<td>${item.title } <small>( ${item.board_cmt_cnt} )</small></td>
 						<td>${item.hits }</td>
 						<td>
-							<c:if test="${item.user_profile_img==null}">
-								<span class="material-icons" style="border-radius: 50%; vertical-align: middle; font-size: 3em;"> account_circle </span>
+							<c:if test="${item.my_like == 1}">
+								<span class="material-icons like_color"> favorite</span>
+								<sup> ${item.board_like_cnt } </sup>
 							</c:if>
-							<c:if test="${item.user_profile_img!=null}">
-								<img src="/img/user/${item.i_user}/${item.user_profile_img}" width="48px;" height="48px;" style="border-radius: 50%; vertical-align: middle;">
+							<c:if test="${item.my_like == 0}">
+								<span class="material-icons like_color"> favorite_border</span>
+								<sup> ${item.board_like_cnt } </sup>
 							</c:if>
+						</td>
+						<td>
+							<div class="profile">
+								<c:if test="${item.user_profile_img==null}">
+									<img src="/img/default_profile.png">
+								</c:if>
+								<c:if test="${item.user_profile_img!=null}">
+									<img src="/img/user/${item.i_user}/${item.user_profile_img}">
+								</c:if>
+							</div>
+						</td>
+						<td>
 							<span>${item.user_nm }</span>
 						</td>
 						<td>${item.r_dt }</td>
