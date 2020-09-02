@@ -11,7 +11,6 @@ import com.koreait.pjt.vo.UserVO;
 import com.sun.openpisces.TransformingPathConsumer2D.FilterSet;
 
 public class MyUtils {
-	
 	public static String scriptFilter(String ctnt) {
 		String[] filters = {"<script>","</script>"};
 		String[] filterReplaces = {"&lt;script&gt;","&lt;/script&gt;"};

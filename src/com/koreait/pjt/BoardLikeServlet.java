@@ -20,11 +20,13 @@ public class BoardLikeServlet extends HttpServlet {
 		String src = String.format("Detail?id=%s"
 				+ "&page=%d"
 				+ "&record_cnt=%d"
-				+ "&searchText=%s",
+				+ "&searchText=%s"
+				+ "&searchType=%s",
 				MyUtils.getIntParamater(request, "id"),
 				MyUtils.getIntParamater(request, "page"),
 				MyUtils.getIntParamater(request, "record_cnt"),
-				request.getParameter("searchText"));
+				request.getParameter("searchText"),
+				request.getParameter("searchType"));
 		response.sendRedirect(src);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

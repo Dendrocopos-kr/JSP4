@@ -59,6 +59,7 @@ th, td {
 	color: black;
 	border: none;
 	border-bottom: grey solid 1px;
+	padding:5px;
 }
 
 th {
@@ -142,9 +143,14 @@ td:nth-child(2) {
 .profile img {
 	width: 1em;
 	height: 1em;
-} 
-.like_color{
+}
+
+.like_color {
+	color: red;
+}
+.highlight{
 	color:red;
+	font-weight: bold;
 }
 </style>
 <body>
@@ -172,7 +178,9 @@ td:nth-child(2) {
 		</div>
 		<div>
 			<form id="selFrm" action="List" method="get" style="margin: 20px;">
-				<input type="hidden" name="page" value="${param.page == null ? 1 : param.page }"> <span>페이지당 표시할 글 수</span> <input type="hidden" name="searchText" value="${param.searchText}">
+				<input type="hidden" name="page" value="${param.page == null ? 1 : param.page }"> <span>페이지당 표시할 글 수</span> 
+				<input type="hidden" name="searchText" value="${param.searchText}">
+				<input type="hidden" name="searchType" value="${searchType == null ? '1' : searchType}">
 				<select name="record_cnt" onchange="changerecordCnt()">
 					<c:forEach begin="10" end="50" step="10" var="item">
 						<c:choose>
@@ -194,24 +202,28 @@ td:nth-child(2) {
 				<th>조회수</th>
 				<th>좋아요</th>
 				<th></th>
-				<th style="width: 15%;">작성자</th>
-				<th style="width: 15%;">작성일</th>
+				<th>작성자</th>
+				<th>작성일</th>
 			</tr>
 			<c:if test="${!empty data}">
 				<c:forEach items="${data}" var="item" varStatus="status">
 					<tr class="itemRow" onclick="moveToDetail(${item.i_board})">
 						<td>${item.i_board }</td>
-						<td>${item.title } <small>( ${item.board_cmt_cnt} )</small></td>
+						<td>${item.title }
+							<small>( ${item.board_cmt_cnt} )</small>
+						</td>
 						<td>${item.hits }</td>
 						<td>
-							<c:if test="${item.my_like == 1}">
-								<span class="material-icons like_color"> favorite</span>
-								<sup> ${item.board_like_cnt } </sup>
-							</c:if>
-							<c:if test="${item.my_like == 0}">
-								<span class="material-icons like_color"> favorite_border</span>
-								<sup> ${item.board_like_cnt } </sup>
-							</c:if>
+							<div>
+								<c:if test="${item.my_like == 1}">
+									<div class="material-icons like_color">favorite</div>
+									<div>${item.board_like_cnt }</div>
+								</c:if>
+								<c:if test="${item.my_like == 0}">
+									<div class="material-icons like_color">favorite_border</div>
+									<div>${item.board_like_cnt }</div>
+								</c:if>
+							</div>
 						</td>
 						<td>
 							<div class="profile">
@@ -232,13 +244,19 @@ td:nth-child(2) {
 			</c:if>
 			<c:if test="${empty data}">
 				<tr>
-					<td colspan=5 style="text-align: center;">작성글이 없습니다.</td>
+					<td colspan=7 style="text-align: center;">작성글이 없습니다.</td>
 				</tr>
 			</c:if>
 		</table>
 
 		<div style="margin: 20px;">
 			<form action="/Board/List">
+				<select name="searchType">
+					<option value="1" ${searchType == '1' ? 'selected' : '' }>제목</option>
+					<option value="2" ${searchType == '2' ? 'selected' : '' }>내용</option>
+					<option value="3" ${searchType == '3' ? 'selected' : '' }>제목+내용</option>
+					<option value="4" ${searchType == '4' ? 'selected' : '' }>작성자</option>
+				</select>
 				<span>검색어 입력: <input name="searchText" value="${param.searchText}"></span>
 				<button type="submit" class="btn">검색</button>
 			</form>
@@ -246,7 +264,7 @@ td:nth-child(2) {
 		<div style="margin: 20px;">
 			<c:forEach var="cnt" begin="1" end="${paging}" step="1">
 				<c:if test="${currentPage != cnt}">
-					<a href="List?page=${cnt}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}" class="pageBtn">${cnt}</a>
+					<a href="List?page=${cnt}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}&searchType=${searchType == null ? '1' : param.searchType}" class="pageBtn">${cnt}</a>
 				</c:if>
 				<c:if test="${currentPage == cnt}">
 					<span class="curpage">${cnt}</span>
@@ -257,7 +275,7 @@ td:nth-child(2) {
 	<script type="text/javascript">
 	function moveToDetail(PK) {
 		console.log(PK);
-		location.href = 'Detail?id='+PK+'&page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}';
+		location.href = 'Detail?id='+PK+'&page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}&searchType=${searchType == null ? 1 : searchType}';
 	}
 	function changerecordCnt(){
 		selFrm.submit();

@@ -12,9 +12,16 @@ public class BoardDomain extends BoardVO{
 	private int my_like;
 	private int board_like_cnt;
 	private int board_cmt_cnt;
+	private String searchType;
 
 	public String getUser_profile_img() {
 		return user_profile_img;
+	}
+	public String getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
 	}
 	public void setUser_profile_img(String user_profile_img) {
 		this.user_profile_img = user_profile_img;

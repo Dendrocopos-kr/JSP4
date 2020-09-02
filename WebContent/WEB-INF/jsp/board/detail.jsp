@@ -42,7 +42,8 @@
 
 .ctnt {
 	display: flex;
-	height: 400px;
+	min-height: 400px;
+	height: auto;
 	padding: 0px;
 	flex-direction: column;
 	justify-content: space-between;
@@ -215,7 +216,12 @@ div input {
 .profile_img img {
 	width: 1em;
 	height: 1em;
-    padding: 10px;
+	padding: 10px;
+}
+
+.highlight {
+	color: red;
+	font-weight: bold;
 }
 </style>
 <body>
@@ -232,7 +238,7 @@ div input {
 			 -->
 			<div>${temp }</div>
 			<div>
-				<a href="List?page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}">
+				<a href="List?page=${param.page == null ? 1 : param.page}&record_cnt=${param.record_cnt == null ? 10 : param.record_cnt}&searchText=${param.searchText}&searchType=${param.searchType == null ? 1 : param.searchType}">
 					<button class="menu_btn">리스트보기</button>
 				</a>
 			</div>
@@ -250,7 +256,7 @@ div input {
 		<div class="board_body">
 			<div class="board_ctnt_title">
 				<div class="title">
-					제목 :${data.title} <span class="err">${err}</span>
+					<span>제목 :</span><span id="elTitle">${data.title}</span><span class="err">${err}</span>
 				</div>
 			</div>
 			<div class="board_profile">
@@ -259,7 +265,7 @@ div input {
 					<!-- 내/외부 처리용 action -->
 					<!-- <form action="" id="like" method="post"> -->
 					<form action="Like" id="like" method="post">
-						<input type="hidden" name="like" value="0"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=0">
+						<input type="hidden" name="like" value="0"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=0"> <input type="hidden" name="searchType" value="${param.searchType == null ? '1' : param.searchType}">
 							<button class="like">
 								<span class="material-icons"> favorite</span><sup> ${data.like_count } </sup>
 							</button>
@@ -269,7 +275,7 @@ div input {
 				<c:if test="${data.like == 0}">
 					<!--<form action="" id="like" method="post"> -->
 					<form action="Like" id="like" method="post">
-						<input type="hidden" name="like" value="1"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=1">
+						<input type="hidden" name="like" value="1"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=1"> <input type="hidden" name="searchType" value="${param.searchType == null ? '1' : param.searchType}">
 							<button class="like">
 								<span class="material-icons"> favorite_border</span><sup> ${data.like_count } </sup>
 							</button>
@@ -279,7 +285,7 @@ div input {
 				<div>조회수 : ${data.hits}</div>
 			</div>
 			<div class="ctnt">
-				<textarea rows="50" readonly="readonly">${data.ctnt}</textarea>
+				<pre style="margin: 10px;" id="elCtnt">${data.ctnt}</pre>
 			</div>
 			<table class="profile">
 				<tr>
@@ -291,7 +297,9 @@ div input {
 							<img src="/img/user/${data.i_user}/${data.user_profile_img}">
 						</c:if>
 					</td>
-					<td>작성자 : ${data.user_nm}</td>
+					<td>
+						<span>작성자 :</span> <span id="elNm">${data.user_nm}</span>
+					</td>
 				</tr>
 			</table>
 			<table class="cmt">
@@ -299,7 +307,7 @@ div input {
 					<c:forEach items="${cmtData}" var="item">
 						<tr>
 							<c:if test="${item.is_del == 0}">
-								<td >
+								<td>
 									<div class="profile_img">
 										<c:if test="${data.user_profile_img==null}">
 											<img src="/img/default_profile.png">
@@ -369,6 +377,38 @@ div input {
 			cmtFrm.cmtSubmt.value = '댓글 수정';
 			cmtFrm.cmtCancelBtn.type = 'button';
 			cmtFrm.cmt_body.focus();
+		}
+		
+		function doHighlight(){
+			let searchText = '${param.searchText}';
+			let searchType = '${param.searchType}';
+			let title = elTitle.innerText;
+			let ctnt = elCtnt.innerText;
+			let nm = elNm.innerText;
+			switch(searchType){
+			case '1':
+				title = title.replace( new RegExp('${param.searchText}','gi'), "<span class=\"highlight\">" + searchText + "</span>");
+				elTitle.innerHTML = title;
+				break;
+			case '2':
+				ctnt = ctnt.replace(new RegExp('${param.searchText}','gi'), "<span class=\"highlight\">" + searchText + "</span>");
+				elCtnt.innerHTML = ctnt;
+				break;
+			case '3':
+				title = title.replace(new RegExp('${param.searchText}','gi'), "<span class=\"highlight\">" + searchText + "</span>");
+				elTitle.innerHTML = title;
+				ctnt = ctnt.replace(new RegExp('${param.searchText}','gi'), "<span class=\"highlight\">" + searchText + "</span>");
+				elCtnt.innerHTML = ctnt;
+				break;
+			case '4':
+				nm = nm.replace(new RegExp('${param.searchText}','gi'), "<span class=\"highlight\">" + searchText + "</span>");
+				elNm.innerHTML = nm;
+				break;
+			}		
+		}
+		
+		if(${param.searchText == '' ? false : true}){
+			doHighlight();
 		}
 	</script>
 </body>
