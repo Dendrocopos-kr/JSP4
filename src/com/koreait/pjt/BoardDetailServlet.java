@@ -33,7 +33,7 @@ public class BoardDetailServlet extends HttpServlet {
 		String searchText = (request.getParameter("searchText") == null ? "" : request.getParameter("searchText"));
 		String searchType = (request.getParameter("searchType") == null ? "a" : request.getParameter("searchType"));
 
-		BoardVO param = new BoardVO();
+		BoardDomain param = new BoardDomain();
 		param.setI_board(MyUtils.getIntParamater(request, "id"));
 		param.setI_user(MyUtils.getLoginUser(request).getI_user());
 		BoardDomain f = BoardDAO.selectBoard(param);
@@ -79,7 +79,7 @@ public class BoardDetailServlet extends HttpServlet {
 			}
 		}
 		*/
-
+		request.setAttribute("likeList", BoardDAO.selectBoardLiskList(param));
 		request.setAttribute("data", f);
 		request.setAttribute("cmtData", BoardCmtDAO.selectBoardCmtList(param));
 		ViewResolver.forwardLoginCheck("board/detail", request, response);

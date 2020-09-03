@@ -223,6 +223,46 @@ div input {
 	color: red;
 	font-weight: bold;
 }
+.like_user{
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	overflow: hidden;	
+}
+
+#likeListContainer {
+	border: 1px solid darkgray;
+	position: absolute;
+	left: 0px;
+	top: 30px;
+	width: AUTO;
+	height: AUTO;
+	max-width: 400px;
+	min-width: 150px;
+	overflow-y: auto;
+	background: white;
+	opacity: 0;
+	z-index: -1;
+	transition-duration: 500ms;
+	display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px black;
+}
+
+#id_like {
+	position: relative;
+	transition: 0.5s ease;
+}
+
+#id_like:hover #likeListContainer {
+	opacity: 1;
+	z-index: 10;
+}
+.cmt_Regmod{
+margin: 5px;
+
+}
 </style>
 <body>
 	<div class="main_body">
@@ -266,8 +306,28 @@ div input {
 					<!-- <form action="" id="like" method="post"> -->
 					<form action="Like" id="like" method="post">
 						<input type="hidden" name="like" value="0"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=0"> <input type="hidden" name="searchType" value="${param.searchType == null ? '1' : param.searchType}">
-							<button class="like">
-								<div><span class="material-icons"> favorite</span></div><div> ${data.like_count > 0 ? data.like_count: '' } </div>
+							<button class="like" id="id_like">
+								<div>
+									<span class="material-icons"> favorite</span>
+								</div>
+								<div>
+									<div>${data.like_count > 0 ? data.like_count: ''}</div>
+									<div id="likeListContainer">
+										<c:if test="${!empty likeList}">
+											<c:forEach items="${likeList}" var="item" varStatus="status">
+												<div>
+													<c:if test="${item.user_profile_img==null}">
+														<img  class="like_user" src="/img/default_profile.png">
+													</c:if>
+													<c:if test="${item.user_profile_img!=null}">
+														<img  class="like_user" src="/img/user/${item.i_user}/${item.user_profile_img}">
+													</c:if>
+												<div>${item.user_nm }</div>
+												</div>
+											</c:forEach>
+										</c:if>
+									</div>
+								</div>
 							</button>
 						</a>
 					</form>
@@ -277,7 +337,27 @@ div input {
 					<form action="Like" id="like" method="post">
 						<input type="hidden" name="like" value="1"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=1"> <input type="hidden" name="searchType" value="${param.searchType == null ? '1' : param.searchType}">
 							<button class="like">
-								<div><span class="material-icons"> favorite_border</span></div><div> ${data.like_count > 0 ? data.like_count: ''} </div>
+								<div>
+									<span class="material-icons"> favorite_border</span>
+								</div>
+								<div id="id_like">
+									<div>${data.like_count > 0 ? data.like_count: ''}</div>
+									<div id="likeListContainer">
+										<c:if test="${!empty likeList}">
+											<c:forEach items="${likeList}" var="item" varStatus="status">
+												<div>
+													<c:if test="${item.user_profile_img==null}">
+														<img  class="like_user" src="/img/default_profile.png">
+													</c:if>
+													<c:if test="${item.user_profile_img!=null}">
+														<img  class="like_user" src="/img/user/${item.i_user}/${item.user_profile_img}">
+													</c:if>
+												<div>${item.user_nm }</div>
+												</div>
+											</c:forEach>
+										</c:if>
+									</div>
+								</div>
 							</button>
 						</a>
 					</form>
@@ -309,11 +389,11 @@ div input {
 							<c:if test="${item.is_del == 0}">
 								<td>
 									<div class="profile_img">
-										<c:if test="${data.user_profile_img==null}">
+										<c:if test="${item.user_profile_img==null}">
 											<img src="/img/default_profile.png">
 										</c:if>
-										<c:if test="${data.user_profile_img!=null}">
-											<img src="/img/user/${data.i_user}/${data.user_profile_img}">
+										<c:if test="${item.user_profile_img!=null}">
+											<img src="/img/user/${item.i_user}/${item.user_profile_img}">
 										</c:if>
 									</div>
 								</td>
@@ -328,8 +408,8 @@ div input {
 							<td class="info">
 								<c:if test="${item.is_del == 0}">
 									<c:if test="${ item.i_user == login_user.i_user }">
-										<button onclick="regCmt(${item.i_cmt},'${item.cmt}')">수정</button>
-										<button onclick="cmtDel(${item.i_cmt});">삭제</button>
+										<button class="cmt_Regmod" onclick="regCmt(${item.i_cmt},'${item.cmt}')">수정</button>
+										<button class="cmt_Regmod" onclick="cmtDel(${item.i_cmt});">삭제</button>
 									</c:if>
 								</c:if>
 							</td>

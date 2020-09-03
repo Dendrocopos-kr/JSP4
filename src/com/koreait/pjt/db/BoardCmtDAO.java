@@ -11,7 +11,7 @@ import com.koreait.pjt.vo.BoardVO;
 
 public class BoardCmtDAO {
 	public static List<BoardCmtVO> selectBoardCmtList(BoardVO param) {
-		String sql = "	SELECT c.i_board, b.user_nm,a.i_user, a.i_cmt, a.cmt, a.is_del, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI')as r_dt "
+		String sql = "	SELECT c.i_board, b.user_nm, b.uprofile_img,a.i_user, a.i_cmt, a.cmt, a.is_del, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI')as r_dt "
 				+ " FROM t_board4_cmt a "
 				+ " JOIN t_user b ON a.i_user = b.i_user "
 				+ " JOIN t_board4  c ON c.i_board = a.i_board "
@@ -28,6 +28,7 @@ public class BoardCmtDAO {
 					BoardCmtVO e = new BoardCmtVO();
 					e.setI_board(rs.getInt("i_board"));
 					e.setI_user(rs.getInt("i_user"));
+					e.setUser_profile_img(rs.getNString("uprofile_img"));
 					e.setUser_nm(rs.getNString("user_nm"));
 					e.setI_cmt(rs.getInt("i_cmt"));
 					e.setCmt(rs.getNString("cmt"));

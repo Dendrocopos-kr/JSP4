@@ -51,6 +51,7 @@ table {
 	border: black 1px solid;
 	border-collapse: collapse;
 	margin: 20px auto;
+	min-width: 100%;
 }
 
 th, td {
@@ -141,6 +142,7 @@ td:nth-child(2) {
 }
 
 .profile img {
+	border-radius: 50%;
 	width: 1em;
 	height: 1em;
 }

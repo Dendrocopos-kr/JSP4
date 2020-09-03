@@ -153,6 +153,38 @@ public class BoardDAO {
 		});
 		return e;
 	}
+	public static List<BoardDomain> selectBoardLiskList(BoardDomain param) {
+		List<BoardDomain> list = new ArrayList<BoardDomain>();
+		String sql = " SELECT " + 
+				" b.i_user, " + 
+				" b.user_nm, " + 
+				" b.uprofile_img " + 
+				" FROM t_board4_like A " + 
+				" inner join t_user B " + 
+				" on a.i_user = b.i_user " + 
+				" where a.i_board = ? " + 
+				" order by a.r_dt asc ";
+		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface(	) {
+			
+			@Override
+			public void prepard(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_board());
+			}
+			
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				while(rs.next()) {
+					BoardDomain vo = new BoardDomain();
+					vo.setI_user(rs.getInt("i_user"));
+					vo.setUser_nm(rs.getNString("user_nm"));
+					vo.setUser_profile_img(rs.getNString("uprofile_img"));
+					list.add(vo);
+				}
+				return 1;
+			}
+		});
+		return list;
+	}
 
 	public static List<BoardDomain> selectBoardList_Page(BoardDomain param) {
 //		String sql = " SELECT  A.* FROM (SELECT ROWNUM as RNUM, A.* FROM ( SELECT a.i_board, a.title, a.hits,b.uprofile_img, a.i_user, to_char(a.r_dt, 'YYYY/MM/DD HH24:MI') AS r_dt, b.user_nm FROM t_board4 a JOIN t_user b ON a.i_user = b.i_user where a.title like ? ORDER BY i_board DESC )A " 
