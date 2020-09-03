@@ -74,42 +74,43 @@ public class UserDAO {
 	}
 	public static int updateUserProfile(UserVO e) {
 		StringBuilder sb = new StringBuilder(" update  t_user  set m_dt = sysdate");		
-		if( e.getUser_pw() != null ) {
+		if( e.getUser_pw() != null && !e.getUser_pw().isEmpty() ) {
 			sb.append(" , USER_PW = '");
 			sb.append(e.getUser_pw());
 			sb.append("' ");
 		}
 		
-		if( e.getUser_nm() != null ) {
+		if( e.getUser_nm() != null && !e.getUser_nm().isEmpty() ) {
 			sb.append(" , USER_NM = '");
 			sb.append(e.getUser_nm());
 			sb.append("' ");
 		}
 
-		if( e.getUser_email() != null ) {
+		if( e.getUser_email() != null && !e.getUser_email().isEmpty() ) {
 			sb.append(" , MAIL = '");
 			sb.append(e.getUser_email());
 			sb.append("' ");
 		}
 		
-		if( e.getProfile_img() != null ) {
+		if( e.getProfile_img() != null && !e.getProfile_img().isEmpty()) {
 			sb.append(" , UPROFILE_IMG = '");
 			sb.append(e.getProfile_img());
 			sb.append("' ");
 		}
-		sb.append(" where i_user = ? ");
-		
+		sb.append(" where i_user =  ");
+		sb.append(e.getI_user());
+		System.out.println(sb);
 		return JdbcTemplate.executeUpdate(sb.toString(), new JdbcUpdateInterface() {
 			
 			@Override
 			public int update(PreparedStatement ps) throws SQLException {
-				ps.setInt(1, e.getI_user());
+				//ps.setInt(1, e.getI_user());
 				return ps.executeUpdate();
 			}
 		});
 	}
 	public static UserVO selectUser(int i_user) {
-		String sql = " select user_nm, uprofile_img, user_id, mail, r_dt "
+		String sql = " select i_user,user_nm, uprofile_img, user_id, mail, r_dt "
 				+ " From t_user where i_user = ? ";
 		UserVO result = new UserVO();
 		
@@ -124,6 +125,7 @@ public class UserDAO {
 			@Override
 			public int executeQuery(ResultSet rs) throws SQLException {
 				if( rs.next() ) {
+					result.setI_user(rs.getInt("i_user"));
 					result.setUser_id(rs.getNString("user_id"));
 					result.setUser_nm(rs.getNString("user_nm"));
 					result.setProfile_img(rs.getNString("uprofile_img"));
@@ -135,6 +137,30 @@ public class UserDAO {
 		});		
 		return result;
 	}
+//	
+//	public static UserVO selectUserPw(int i_user) {
+//		String sql = " select user_pw "
+//				+ " From t_user where i_user = ? ";
+//		UserVO result = new UserVO();
+//		
+//		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+//			
+//			@Override
+//			public void prepard(PreparedStatement ps) throws SQLException {
+//				ps.setInt(1, i_user);				
+//			}
+//			
+//			@Override
+//			public int executeQuery(ResultSet rs) throws SQLException {
+//				if( rs.next() ) {
+//					result.setUser_pw(rs.getNString("user_pw"));
+//				}
+//				return 1;
+//			}
+//		});		
+//		return result;
+//	}
+//	
 	/*
 	 * public static int getUserName(UserVO param) { String sql =
 	 * " select user_nm from t_user where i_user = ? "; return

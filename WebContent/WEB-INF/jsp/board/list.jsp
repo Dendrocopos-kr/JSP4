@@ -154,7 +154,7 @@ td:nth-child(2) {
 }
 </style>
 <body>
-	<div class="container">
+	<div class="container"> 
 		<div>
 			<h1>
 				<span class="material-icons"> event_note </span>게시판 리스트
@@ -164,7 +164,7 @@ td:nth-child(2) {
 			✔【<span id="user-color">${login_user.user_nm}</span>】님 환영합니다.
 		</div>
 		<div style="text-align: right; margin: 20px;">
-			<a href="/Profile"><button class="btn">프로필</button></a> <a href="/Logout">
+			<a href="/Member_confirm"><button class="btn">프로필</button></a> <a href="/Logout">
 				<button class="btn">로그아웃</button>
 			</a>
 		</div>
@@ -217,11 +217,11 @@ td:nth-child(2) {
 							<div>
 								<c:if test="${item.my_like == 1}">
 									<div class="material-icons like_color">favorite</div>
-									<div>${item.board_like_cnt }</div>
+									<div>${item.board_like_cnt > 0 ? item.board_like_cnt : '' }</div>
 								</c:if>
 								<c:if test="${item.my_like == 0}">
 									<div class="material-icons like_color">favorite_border</div>
-									<div>${item.board_like_cnt }</div>
+									<div>${item.board_like_cnt > 0 ? item.board_like_cnt : ''}</div>
 								</c:if>
 							</div>
 						</td>

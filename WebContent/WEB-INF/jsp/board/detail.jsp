@@ -267,7 +267,7 @@ div input {
 					<form action="Like" id="like" method="post">
 						<input type="hidden" name="like" value="0"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=0"> <input type="hidden" name="searchType" value="${param.searchType == null ? '1' : param.searchType}">
 							<button class="like">
-								<span class="material-icons"> favorite</span><sup> ${data.like_count } </sup>
+								<div><span class="material-icons"> favorite</span></div><div> ${data.like_count > 0 ? data.like_count: '' } </div>
 							</button>
 						</a>
 					</form>
@@ -277,7 +277,7 @@ div input {
 					<form action="Like" id="like" method="post">
 						<input type="hidden" name="like" value="1"> <input type="hidden" name="id" value="${data.i_board}"> <input type="hidden" name="searchText" value="${param.searchText}"> <input type="hidden" name="record_cnt" value="${param.record_cnt == null ? 10 : param.record_cnt}"> <input type="hidden" name="page" value="${param.page == null ? 1 : param.page}"> <a href="?id=${data.i_board}&like=1"> <input type="hidden" name="searchType" value="${param.searchType == null ? '1' : param.searchType}">
 							<button class="like">
-								<span class="material-icons"> favorite_border</span><sup> ${data.like_count } </sup>
+								<div><span class="material-icons"> favorite_border</span></div><div> ${data.like_count > 0 ? data.like_count: ''} </div>
 							</button>
 						</a>
 					</form>
