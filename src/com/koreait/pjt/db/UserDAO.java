@@ -99,7 +99,7 @@ public class UserDAO {
 		}
 		sb.append(" where i_user =  ");
 		sb.append(e.getI_user());
-		System.out.println(sb);
+		//System.out.println(sb);
 		return JdbcTemplate.executeUpdate(sb.toString(), new JdbcUpdateInterface() {
 			
 			@Override

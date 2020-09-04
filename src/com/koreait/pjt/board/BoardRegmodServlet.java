@@ -1,4 +1,4 @@
-package com.koreait.pjt;
+package com.koreait.pjt.board;
 
 import java.io.IOException;
 
@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.koreait.pjt.MyUtils;
+import com.koreait.pjt.ViewResolver;
 import com.koreait.pjt.db.BoardDAO;
 import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;

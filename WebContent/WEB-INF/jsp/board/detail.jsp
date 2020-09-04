@@ -217,6 +217,7 @@ div input {
 	width: 1em;
 	height: 1em;
 	padding: 10px;
+	border-radius: 50%;
 }
 
 .highlight {

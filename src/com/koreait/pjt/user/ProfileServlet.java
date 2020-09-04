@@ -67,8 +67,8 @@ public class ProfileServlet extends HttpServlet {
 				fileNm = mr.getFilesystemName(key);
 				// originFileNm = mr.getOriginalFileName(key);
 
-				System.out.println(key);
-				System.out.println(fileNm);
+				//System.out.println(key);
+				//System.out.println(fileNm);
 				//System.out.println(originFileNm);
 				if( fileNm != null ) {
 					String ext = fileNm.substring(fileNm.lastIndexOf("."));
