@@ -44,6 +44,6 @@ public class JoinServlet extends HttpServlet {
 			request.setAttribute("tempData", param);
 			doGet(request, response);
 		}
-		response.sendRedirect("Login");
+		response.sendRedirect(Const.DEFUALT_PAGE);
 	}
 }
