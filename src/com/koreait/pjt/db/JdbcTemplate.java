@@ -3,8 +3,6 @@ package com.koreait.pjt.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JdbcTemplate {
 	public static int executeQuery(String sql, JdbcSelectInterface jdbc) {

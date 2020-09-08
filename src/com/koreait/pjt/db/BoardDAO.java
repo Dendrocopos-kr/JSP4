@@ -6,11 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.koreait.pjt.MyUtils;
 import com.koreait.pjt.vo.BoardDomain;
 import com.koreait.pjt.vo.BoardVO;
-
-import javafx.beans.binding.StringBinding;
 
 public class BoardDAO {
 	public static int selectPagingCnt(BoardDomain param) {
